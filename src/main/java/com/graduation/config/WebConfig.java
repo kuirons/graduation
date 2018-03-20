@@ -1,10 +1,10 @@
 package com.graduation.config;
 
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -26,7 +26,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     resolver.setSuffix(".html");
     return resolver;
   }
-
 
   // todo 如果需要对静态资源进行访问，可以在下面进行配置
 //  @Override
