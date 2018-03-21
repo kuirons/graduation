@@ -10,5 +10,5 @@ import org.springframework.context.annotation.Configuration;
  * @date 2018/3/19 20:42
  */
 @Configuration
-@ComponentScan(basePackages = {"com.graduation.log", "com.graduation.logic", "com.graduation.util"})
+@ComponentScan(basePackages = {"com.graduation.log", "com.graduation.logic"})
 public class RootConfig {}

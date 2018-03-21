@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" shutdownHook="disable">
+    <Properties>
+        <!-- 程序日志相关参数-->
+        <Property name="app_log">target/logs</Property>
+        <Property name="app_name">ltnz</Property>
+        <!-- 操作日志相关参数-->
+        <Property name="opt_log_head">RUNNING_LOG</Property>
+
+        <Property name="opt_dir">target/running_log</Property>
+        <Property name="opt_zdir">target/running_log_zip</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss:SSS} %p][%t-%c{1}]%m%n"/>
+        </Console>
+        <RollingRandomAccessFile name="RUNNING_LOG_APPENDER"
+                                 fileName="${opt_dir}/${opt_log_head}.log"
+                                 filePattern="${opt_zdir}/${app_name}-%d{yyyyMMdd}.log">
+            <PatternLayout pattern="[%d{yyyyMMdd-HHmmss}]%m%n"/>
+            <!-- 这里日志的打包间单位是与上面的日期最小单位一致的,哎呀就是一天打包一次 -->
+            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            <DefaultRolloverStrategy>
+                <!-- 日志存好久，存7天 -->
+                <Delete basePath="${opt_zdir}/" maxDepth="1">
+                    <IfFileName glob="${opt_name}-*.log.gz"/>
+                    <IfLastModified age="7d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RollingFile"
+                                 fileName="${app_log}/${app_name}.log"
+                                 filePattern="${app_log}/${app_name}-%d{yyyyMMdd}.log"
+                                 ignoreExceptions="false">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss:SSS} %p][%t-%c{1}]%m%n"/>
+            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${app_log}/" maxDepth="1">
+                    <IfFileName glob="*.log"/>
+                    <IfLastModified age="7d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <!-- additivity设置为false可以避免在该logger满足root的情况下输出两遍日志 -->
+        <logger name="${opt_log_head}" level="info" additivity="false">
+            <AppenderRef ref="RUNNING_LOG_APPENDER"/>
+        </logger>
+        <Root level="info" additivity="true">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+            <!--<AppenderRef ref="AsyncAppender"/>-->
+        </Root>
+    </Loggers>
+</Configuration>
