@@ -1,5 +1,8 @@
 package com.graduation.logic.db;
 
+import com.sun.tools.corba.se.idl.PragmaEntry;
+import org.apache.avro.generic.GenericData;
+import org.apache.commons.collections.ResettableListIterator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -7,6 +10,7 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -15,9 +19,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
+import java.nio.file.attribute.FileTime;
+import java.util.*;
 
 /**
  * @author WuGYu
@@ -220,6 +225,14 @@ public class HbaseManager {
     }
   }
 
+  /**
+   * 异步添加数据
+   *
+   * @param tableName
+   * @param puts
+   * @return
+   * @throws Exception
+   */
   public long asynPut(String tableName, List<Put> puts) throws Exception {
     // 当前系统时间
     long currentTime = System.currentTimeMillis();
@@ -239,6 +252,220 @@ public class HbaseManager {
         new BufferedMutatorParams(TableName.valueOf(tableName)).listener(listener);
     params.writeBufferSize(5 * 1024 * 1024);
     final BufferedMutator mutator = connection.getBufferedMutator(params);
-    return 0;
+    try {
+      mutator.mutate(puts);
+      mutator.flush();
+    } finally {
+      mutator.close();
+    }
+    return System.currentTimeMillis() - currentTime;
+  }
+
+  /**
+   * 异步添加单条数据 就是把缓冲池填满在一哈添加到hbase中
+   *
+   * @param tableName
+   * @param put
+   * @return
+   * @throws Exception
+   */
+  public long asynPut(String tableName, Put put) throws Exception {
+    return asynPut(tableName, Arrays.asList(put));
+  }
+
+  /**
+   * 一条一条数据添加，不走缓冲池
+   *
+   * @param tableName
+   * @param put
+   * @return
+   */
+  public long synPut(String tableName, Put put) {
+    long currentTime = System.currentTimeMillis();
+    Table table = getTable(tableName);
+    if (table != null) {
+      try {
+        table.put(put);
+      } catch (IOException e) {
+        LOGGER.error("同步添加数据:{}失败", put.getRow(), e);
+      } finally {
+        try {
+          table.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return System.currentTimeMillis() - currentTime;
+  }
+
+  /**
+   * 一次添加一批数据
+   *
+   * @param tableName
+   * @param puts
+   * @return
+   */
+  public long synPuts(String tableName, List<Put> puts) {
+    long currentTime = System.currentTimeMillis();
+    Table table = getTable(tableName);
+    if (table != null) {
+      try {
+        table.put(puts);
+      } catch (IOException e) {
+        LOGGER.error("同步批量添加数据:{}失败", e);
+      } finally {
+        try {
+          table.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return System.currentTimeMillis() - currentTime;
+  }
+
+  /**
+   * 删除某行数据
+   *
+   * @param tableName
+   * @param row
+   */
+  public void delete(String tableName, String row) {
+    Table table = getTable(tableName);
+    if (table != null) {
+      try {
+        Delete delete = new Delete(row.getBytes());
+        table.delete(delete);
+      } catch (IOException e) {
+        LOGGER.error("删除数据:{}失败", row, e);
+      } finally {
+        try {
+          table.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  /**
+   * 批量删除数据
+   *
+   * @param tableName
+   * @param rows
+   */
+  public void delete(String tableName, String[] rows) {
+    Table table = getTable(tableName);
+    if (table != null) {
+      try {
+        List<Delete> deletes = new ArrayList<>();
+        Arrays.stream(rows).forEach(row -> deletes.add(new Delete(row.getBytes())));
+        if (deletes.size() > 0) table.delete(deletes);
+      } catch (IOException e) {
+        LOGGER.error("批量删除数据失败", e);
+      } finally {
+        try {
+          table.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  /**
+   * 获取单条数据
+   *
+   * @param tableName
+   * @param row
+   * @param filters
+   * @return
+   */
+  public Result getRow(String tableName, String row, Filter... filters) {
+    Table table = getTable(tableName);
+    Result rs = null;
+    if (table != null) {
+      try {
+        Get get = new Get(row.getBytes());
+        if (filters.length > 0) {
+          Arrays.stream(filters).forEach(filter -> get.setFilter(filter));
+        }
+        rs = table.get(get);
+      } catch (IOException e) {
+        LOGGER.error("获取数据:{}失败", row, e);
+      } finally {
+        try {
+          table.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return rs;
+  }
+
+  /**
+   * 批量获取数据
+   * @param tableName
+   * @param rows
+   * @return
+   */
+  public Result[] getRows(String tableName,List<String> rows){
+    Table table = getTable(tableName);
+    Result[] results = null;
+    if(table != null) {
+      List<Get> gets = new ArrayList<>();
+      try{
+        rows.stream().filter(s->!StringUtils.isBlank(s)).forEach(s->gets.add(new Get(s.getBytes())));
+        if(gets.size()>0)
+          results = table.get(gets);
+      } catch (IOException e) {
+        LOGGER.error("获取数据失败",e);
+      }finally{
+        try{
+          table.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return results;
+  }
+
+  public ResultScanner getScan(String tableName, HashMap<String,List<String>> paramHashMap,Filter filter){
+    Table table = getTable(tableName);
+    ResultScanner results = null;
+    if(table != null){
+      try{
+        if(paramHashMap == null){
+          paramHashMap = new HashMap<>();
+        }
+        results = table.getScanner(setScanParam(paramHashMap,filter));
+      }catch (IOException e){
+        LOGGER.error("获取扫描器失败",e);
+      }finally{
+        try{
+          table.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return results;
+  }
+
+  private Scan setScanParam(HashMap<String, List<String>> paramHashMap, Filter filter) {
+    Scan scan = new Scan();
+    scan.setCaching(1000);
+    if(filter != null){
+      scan.setFilter(filter);
+    }
+    if(paramHashMap.containsKey("column")){
+      paramHashMap.get("column").forEach(s->scan.addColumn(s.split("-")[0].getBytes(),s.split("-")[1].getBytes()));
+    }
+    if(paramHashMap.containsKey("timeRange")){
+      String timeRange
+    }
   }
 }
