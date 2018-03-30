@@ -1,8 +1,5 @@
 package com.graduation.logic.db;
 
-import com.sun.tools.corba.se.idl.PragmaEntry;
-import org.apache.avro.generic.GenericData;
-import org.apache.commons.collections.ResettableListIterator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -10,7 +7,6 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
-import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -19,10 +15,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.attribute.FileTime;
+<<<<<<< HEAD
 import java.util.*;
+=======
+import java.util.Iterator;
+import java.util.List;
+>>>>>>> parent of ab5639f... hbase1
 
 /**
  * @author WuGYu
@@ -225,14 +224,6 @@ public class HbaseManager {
     }
   }
 
-  /**
-   * 异步添加数据
-   *
-   * @param tableName
-   * @param puts
-   * @return
-   * @throws Exception
-   */
   public long asynPut(String tableName, List<Put> puts) throws Exception {
     // 当前系统时间
     long currentTime = System.currentTimeMillis();
@@ -252,6 +243,7 @@ public class HbaseManager {
         new BufferedMutatorParams(TableName.valueOf(tableName)).listener(listener);
     params.writeBufferSize(5 * 1024 * 1024);
     final BufferedMutator mutator = connection.getBufferedMutator(params);
+<<<<<<< HEAD
     try {
       mutator.mutate(puts);
       mutator.flush();
@@ -407,23 +399,25 @@ public class HbaseManager {
 
   /**
    * 批量获取数据
+   *
    * @param tableName
    * @param rows
    * @return
    */
-  public Result[] getRows(String tableName,List<String> rows){
+  public Result[] getRows(String tableName, List<String> rows) {
     Table table = getTable(tableName);
     Result[] results = null;
-    if(table != null) {
+    if (table != null) {
       List<Get> gets = new ArrayList<>();
-      try{
-        rows.stream().filter(s->!StringUtils.isBlank(s)).forEach(s->gets.add(new Get(s.getBytes())));
-        if(gets.size()>0)
-          results = table.get(gets);
+      try {
+        rows.stream()
+            .filter(s -> !StringUtils.isBlank(s))
+            .forEach(s -> gets.add(new Get(s.getBytes())));
+        if (gets.size() > 0) results = table.get(gets);
       } catch (IOException e) {
-        LOGGER.error("获取数据失败",e);
-      }finally{
-        try{
+        LOGGER.error("获取数据失败", e);
+      } finally {
+        try {
           table.close();
         } catch (IOException e) {
           e.printStackTrace();
@@ -433,19 +427,20 @@ public class HbaseManager {
     return results;
   }
 
-  public ResultScanner getScan(String tableName, HashMap<String,List<String>> paramHashMap,Filter filter){
+  public ResultScanner getScan(
+      String tableName, HashMap<String, List<String>> paramHashMap, Filter filter) {
     Table table = getTable(tableName);
     ResultScanner results = null;
-    if(table != null){
-      try{
-        if(paramHashMap == null){
+    if (table != null) {
+      try {
+        if (paramHashMap == null) {
           paramHashMap = new HashMap<>();
         }
-        results = table.getScanner(setScanParam(paramHashMap,filter));
-      }catch (IOException e){
-        LOGGER.error("获取扫描器失败",e);
-      }finally{
-        try{
+        results = table.getScanner(setScanParam(paramHashMap, filter));
+      } catch (IOException e) {
+        LOGGER.error("获取扫描器失败", e);
+      } finally {
+        try {
           table.close();
         } catch (IOException e) {
           e.printStackTrace();
@@ -458,14 +453,45 @@ public class HbaseManager {
   private Scan setScanParam(HashMap<String, List<String>> paramHashMap, Filter filter) {
     Scan scan = new Scan();
     scan.setCaching(1000);
-    if(filter != null){
+    if (filter != null) {
       scan.setFilter(filter);
     }
-    if(paramHashMap.containsKey("column")){
-      paramHashMap.get("column").forEach(s->scan.addColumn(s.split("-")[0].getBytes(),s.split("-")[1].getBytes()));
+    if (paramHashMap.containsKey("column")) {
+      paramHashMap
+          .get("column")
+          .forEach(s -> scan.addColumn(s.split("-")[0].getBytes(), s.split("-")[1].getBytes()));
     }
-    if(paramHashMap.containsKey("timeRange")){
-      String timeRange
+    if (paramHashMap.containsKey("timeRange")) {
+      String timeRange = paramHashMap.get("timeRange").get(0);
+      try {
+        scan.setTimeRange(
+            Long.parseLong(timeRange.split("-")[0]), Long.parseLong(timeRange.split("-")[1]));
+      } catch (IOException e) {
+        LOGGER.error("设置扫描器时间失败", e);
+      }
     }
+    if (paramHashMap.containsKey("timeStamp")) {
+      try {
+        scan.setTimeStamp(Long.parseLong(paramHashMap.get("timeStamp").get(0)));
+      } catch (IOException e) {
+        LOGGER.error("设置扫描器时间失败");
+      }
+    }
+    if (paramHashMap.containsKey("version")) {
+      scan.setMaxVersions(Integer.parseInt(paramHashMap.get("version").get(0)));
+    }
+    if (paramHashMap.containsKey("startRow")) {
+      scan.setStartRow(paramHashMap.get("startRow").get(0).getBytes());
+    }
+    if (paramHashMap.containsKey("stopRow")) {
+      scan.setStopRow(paramHashMap.get("stopRow").get(0).getBytes());
+    }
+    if (paramHashMap.containsKey("families")) {
+      paramHashMap.get("families").stream().forEach(s -> scan.addFamily(s.getBytes()));
+    }
+    return scan;
+=======
+    return 0;
+>>>>>>> parent of ab5639f... hbase1
   }
 }
