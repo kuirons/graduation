@@ -7,6 +7,7 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -16,12 +17,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-<<<<<<< HEAD
 import java.util.*;
-=======
 import java.util.Iterator;
 import java.util.List;
->>>>>>> parent of ab5639f... hbase1
 
 /**
  * @author WuGYu
@@ -243,7 +241,6 @@ public class HbaseManager {
         new BufferedMutatorParams(TableName.valueOf(tableName)).listener(listener);
     params.writeBufferSize(5 * 1024 * 1024);
     final BufferedMutator mutator = connection.getBufferedMutator(params);
-<<<<<<< HEAD
     try {
       mutator.mutate(puts);
       mutator.flush();
@@ -490,8 +487,5 @@ public class HbaseManager {
       paramHashMap.get("families").stream().forEach(s -> scan.addFamily(s.getBytes()));
     }
     return scan;
-=======
-    return 0;
->>>>>>> parent of ab5639f... hbase1
   }
 }
