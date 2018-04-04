@@ -8,7 +8,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
  */
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
   protected Class<?>[] getRootConfigClasses() {
-    return new Class[] {RootConfig.class};
+    return new Class[] {RootConfig.class,SecurityConfig.class};
   }
 
   protected Class<?>[] getServletConfigClasses() {
@@ -18,4 +18,5 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
   protected String[] getServletMappings() {
     return new String[] {"/"};
   }
+
 }
