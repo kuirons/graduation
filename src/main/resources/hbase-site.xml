@@ -197,7 +197,7 @@
     
     <property>
       <name>hbase.zookeeper.quorum</name>
-      <value>master,slave1,slave2</value>
+      <value>slave2,master,slave1</value>
     </property>
     
     <property>
