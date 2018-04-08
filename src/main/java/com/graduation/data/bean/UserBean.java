@@ -15,7 +15,6 @@ public class UserBean {
   }
 
   public String getUserName() {
-
     return userName;
   }
 

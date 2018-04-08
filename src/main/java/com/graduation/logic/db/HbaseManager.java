@@ -436,7 +436,7 @@ public class HbaseManager {
   }
 
   public ResultScanner getScan(
-      String tableName, HashMap<String, List<String>> paramHashMap, Filter filter) {
+      String tableName, @Nullable HashMap<String, List<String>> paramHashMap, Filter filter) {
     Table table = getTable(tableName);
     ResultScanner results = null;
     if (table != null) {

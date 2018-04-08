@@ -13,16 +13,38 @@ public class UserRoleBean {
   // 角色名
   private String roleName = "";
 
-  UserRoleBean(@Nullable String userName, @Nullable String roleName) {
+  public UserRoleBean(@Nullable String userName, @Nullable String roleName) {
     if (userName != null) this.userName = userName;
     if (roleName != null) this.roleName = roleName;
   }
   // 这个主要用来处理从数据库中查询出来后带有填充字符的情况，其他情况莫用
-  UserRoleBean(String result) {
+  public UserRoleBean(String result) {
     String r = result.replace("*", "");
     String[] msg = r.split("-");
     this.userName = msg[0];
     this.roleName = msg[1];
+  }
+
+  public UserRoleBean(UserBean userBean, RoleBean roleBean) {
+    this.userName = userBean.getUserName();
+    this.roleName = roleBean.getRole();
+  }
+
+  public String getRoleName() {
+    return roleName;
+  }
+
+  public void setRoleName(String roleName) {
+    this.roleName = roleName;
+  }
+
+  public String getUserName() {
+
+    return userName;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
   }
 
   @Override
