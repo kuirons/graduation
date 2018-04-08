@@ -1,6 +1,8 @@
 package com.graduation.logic.initialize;
 
 import com.graduation.logic.db.HbaseManager;
+import com.graduation.security.Jurisdiction;
+import com.graduation.util.MD5Util;
 import org.apache.hadoop.hbase.client.Put;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -13,34 +15,78 @@ import org.springframework.stereotype.Service;
 public class AppInitialize implements InitializingBean {
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HbaseManager.class);
 
-  private static final String TABLE_NAME = "graduation_userinfo";
-  private static final String DEFAULT_USER_NAME = "admin";
-  private static final String DEFAULT_USER_PASSWOAR = "admin";
-  private static final String DEFAULT_USER_AUTHORITY = "admin";
-  private static final String DEFAULT_SALT = "graduation";
-
   @Autowired HbaseManager hbaseManager;
 
+  // 这里主要保证程序运行需要的基本表存在
   @Override
   public void afterPropertiesSet() throws Exception {
-    LOGGER.info("开始检查权限表");
+    LOGGER.info("开始检查表是否存在");
     // 这里检查数据库表是否完备，如果不完备，创建默认的表并添加默认的用户
-    if (!hbaseManager.existTable(TABLE_NAME)) {
-      LOGGER.info("默认表不存在，开始创建默认权限表");
-      hbaseManager.createTable(TABLE_NAME, new String[] {"userinfo"});
-      Put put = new Put(DEFAULT_USER_NAME.getBytes());
-      // password
-      put.addColumn(
-          "userinfo".getBytes(),
-          "password".getBytes(),
-          new Md5PasswordEncoder().encodePassword(DEFAULT_USER_PASSWOAR, DEFAULT_SALT).getBytes());
-      // authority
-      put.addColumn(
-          "userinfo".getBytes(), "authority".getBytes(), DEFAULT_USER_AUTHORITY.getBytes());
-      hbaseManager.synPut(TABLE_NAME, put);
-      LOGGER.info("表创建完毕");
-      return;
+    checkTable("graduation_user");
+    checkTable("graduation_role");
+    checkTable("graduation_jurisdiction");
+    checkTable("graduation_user_role");
+    checkTable("graduation_role_jurisdiction");
+  }
+
+  // 表的关系自己维护
+  private void checkTable(String tableName) {
+    String msg;
+    Put put;
+    String[] families;
+    switch (tableName) {
+      case "graduation_user":
+        msg = "用户";
+        put = new Put("admin".getBytes());
+        put.addColumn(
+            "userinfo".getBytes(), "password".getBytes(), MD5Util.getMd5String("admin").getBytes());
+        families = new String[] {"userinfo"};
+        break;
+      case "graduation_role":
+        msg = "角色";
+        put = new Put("ROLE_ADMIN".getBytes());
+        put.addColumn("roleinfo".getBytes(), "description".getBytes(), "管理员".getBytes());
+        families = new String[] {"roleinfo"};
+        break;
+      case "graduation_jurisdiction":
+        msg = "权限";
+        put = new Put("admin".getBytes());
+        put.addColumn("jurisdictioninfo".getBytes(), "description".getBytes(), "超级用户权限".getBytes());
+        families = new String[] {"jurisdictioninfo"};
+        break;
+      case "graduation_user_role":
+        msg = "用户-角色";
+        put = new Put("admin".getBytes());
+        put.addColumn("userroleinfo".getBytes(), "role".getBytes(), "ROLE_ADMIN".getBytes());
+        families = new String[] {"userroleinfo"};
+        break;
+      case "graduation_role_jurisdiction":
+        msg = "角色-权限";
+        put = new Put("ROLE_ADMIN".getBytes());
+        put.addColumn(
+            "rolejurisdictioninfo".getBytes(),
+            "jurisdiction".getBytes(),
+            Jurisdiction.g_admin.toString().getBytes());
+        families = new String[] {"rolejurisdictioninfo"};
+        break;
+      default:
+        return;
     }
-    LOGGER.info("权限表ok！！！");
+    try {
+      checkTable(tableName, msg, families, put);
+    } catch (Exception e) {
+      LOGGER.error("启动失败");
+      System.exit(-1);
+    }
+  }
+
+  private void checkTable(String tableName, String msg, String[] families, Put put)
+      throws Exception {
+    if (!hbaseManager.existTable(tableName)) {
+      LOGGER.info(msg + "表不存在，开始创建");
+      hbaseManager.createTable(tableName, families);
+      hbaseManager.synPut(tableName, put);
+      LOGGER.info(msg + "表创建完毕");
+    }
   }
 }
