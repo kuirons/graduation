@@ -14,8 +14,8 @@ public class UserDBImpl {
 
   public UserBean getUserByName(String userName) {
     Result result = hbaseManager.getRow(TABLENAME, userName);
-    //      return new
-    // UserBean().setUserName(result.getColumnCells("userinfo".getBytes(),"password".getBytes()).)
-    return null;
+    return new UserBean()
+        .setUserName(userName)
+        .setPassword(new String(result.getValue("userinfo".getBytes(), "password".getBytes())));
   }
 }
