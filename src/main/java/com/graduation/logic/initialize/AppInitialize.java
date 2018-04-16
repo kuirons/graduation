@@ -1,14 +1,16 @@
 package com.graduation.logic.initialize;
 
+import com.graduation.data.bean.RoleJurisdicationBean;
+import com.graduation.data.bean.UserRoleBean;
 import com.graduation.logic.db.HbaseManager;
-import com.graduation.security.Jurisdiction;
 import com.graduation.util.MD5Util;
 import org.apache.hadoop.hbase.client.Put;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Nullable;
 
 /** Created by kuirons on 18-4-6 */
 @Service
@@ -22,11 +24,21 @@ public class AppInitialize implements InitializingBean {
   public void afterPropertiesSet() throws Exception {
     LOGGER.info("开始检查表是否存在");
     // 这里检查数据库表是否完备，如果不完备，创建默认的表并添加默认的用户
+    LOGGER.info("开始检查用户表");
     checkTable("graduation_user");
+    LOGGER.info("用户表OK！");
+    LOGGER.info("开始检查角色表");
     checkTable("graduation_role");
+    LOGGER.info("角色表OK！");
+    LOGGER.info("开始检查权限表");
     checkTable("graduation_jurisdiction");
+    LOGGER.info("权限表OK！");
+    LOGGER.info("开始检查用户-角色表");
     checkTable("graduation_user_role");
+    LOGGER.info("用户-角色表OK！");
+    LOGGER.info("开始检查角色-权限表");
     checkTable("graduation_role_jurisdiction");
+    LOGGER.info("角色-权限表OK！");
   }
 
   // 表的关系自己维护
@@ -44,7 +56,7 @@ public class AppInitialize implements InitializingBean {
         break;
       case "graduation_role":
         msg = "角色";
-        put = new Put("ROLE_ADMIN".getBytes());
+        put = new Put("ADMIN".getBytes());
         put.addColumn("roleinfo".getBytes(), "description".getBytes(), "管理员".getBytes());
         families = new String[] {"roleinfo"};
         break;
@@ -56,18 +68,17 @@ public class AppInitialize implements InitializingBean {
         break;
       case "graduation_user_role":
         msg = "用户-角色";
-        put = new Put("admin".getBytes());
-        put.addColumn("userroleinfo".getBytes(), "role".getBytes(), "ROLE_ADMIN".getBytes());
-        families = new String[] {"userroleinfo"};
+        // 前缀已经处理过了
+        new UserRoleBean("admin", "ADMIN");
+        put = new Put(new UserRoleBean("admin", "ADMIN").toString().getBytes());
+        put.addColumn("info".getBytes(), "description".getBytes(), "aa".getBytes());
+        families = new String[] {"info"};
         break;
       case "graduation_role_jurisdiction":
         msg = "角色-权限";
-        put = new Put("ROLE_ADMIN".getBytes());
-        put.addColumn(
-            "rolejurisdictioninfo".getBytes(),
-            "jurisdiction".getBytes(),
-            Jurisdiction.g_admin.toString().getBytes());
-        families = new String[] {"rolejurisdictioninfo"};
+        put = new Put(new RoleJurisdicationBean("ADMIN", "g_admin").toString().getBytes());
+        put.addColumn("info".getBytes(), "description".getBytes(), "aa".getBytes());
+        families = new String[] {"info"};
         break;
       default:
         return;

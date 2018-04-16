@@ -110,7 +110,8 @@ public class HbaseManager {
    * @param splitKeys
    * @throws Exception
    */
-  public void createTable(String tableName, String[] columFamilies, @Nullable byte[][] splitKeys)
+  public void createTable(
+      String tableName, @Nullable String[] columFamilies, @Nullable byte[][] splitKeys)
       throws Exception {
     Connection connection = getConnection();
     HBaseAdmin admin = (HBaseAdmin) connection.getAdmin();
@@ -120,8 +121,10 @@ public class HbaseManager {
         return;
       }
       HTableDescriptor tableDescriptor = new HTableDescriptor(TableName.valueOf(tableName));
-      for (String cfs : columFamilies) {
-        tableAddFamilies(tableDescriptor, cfs);
+      if (columFamilies != null) {
+        for (String cfs : columFamilies) {
+          tableAddFamilies(tableDescriptor, cfs);
+        }
       }
       if (splitKeys == null) admin.createTable(tableDescriptor);
       else admin.createTable(tableDescriptor, splitKeys);
