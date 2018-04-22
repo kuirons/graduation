@@ -1,7 +1,9 @@
 package com.graduation.logic.db.impl;
 
+import com.google.common.base.Preconditions;
 import com.graduation.data.bean.UserBean;
 import com.graduation.logic.db.HbaseManager;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.hbase.client.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,6 +15,7 @@ public class UserDBImpl {
   @Autowired HbaseManager hbaseManager;
 
   public UserBean getUserByName(String userName) {
+    Preconditions.checkNotNull(StringUtils.isBlank(userName), "用户名不能为空哦！！！");
     Result result = hbaseManager.getRow(TABLENAME, userName);
     return new UserBean()
         .setUserName(userName)

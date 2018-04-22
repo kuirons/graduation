@@ -11,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class MyUserDetailsServer implements UserDetailsService {
   public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
     UserBean userbean = userDB.getUserByName(userName);
     if (userbean == null) throw new UsernameNotFoundException(userName + "找不到啊！！！！！");
-    List<UserRoleBean> urs = userRoleDB.getUserRoleByUserName(userName);
+    List<UserRoleBean>   urs = userRoleDB.getUserRoleByUserName(userName);
     List<String> roleNames = new ArrayList<>();
     urs.forEach(userRoleBean -> roleNames.add(userRoleBean.getRoleName()));
     // 获取权限集合
