@@ -1,38 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="dataAnalysis">
-  <title>login</title>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="dataAnalysis">
+    <title>login</title>
 
-  <!-- ========== Css Files ========== -->
-  <link href="css/root.css" rel="stylesheet">
-  <style type="text/css">
-    body{background: #F5F5F5;}
-  </style>
-  </head>
-  <body>
+    <!-- ========== Css Files ========== -->
+    <link href="css/root.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            background: #F5F5F5;
+        }
+    </style>
+</head>
+<body>
 
-    <div class="login-form">
-      <form action="/dataAnalysis/login" method="post">
+<div class="login-form">
+    <form id="login-form">
         <div class="top">
-          <h3>自适应光学数据分析系统</h3>
+            <h3>自适应光学数据分析系统</h3>
         </div>
         <div class="form-area">
-          <div class="group">
-            <input type="text" class="form-control" placeholder="username" id="username" name="username">
-            <i class="fa fa-user"></i>
-          </div>
-          <div class="group">
-            <input type="password" class="form-control" placeholder="password" id="password" name="password">
-            <i class="fa fa-key"></i>
-          </div>
-          <button type="submit" class="btn btn-default btn-block">LOGIN</button>
+            <div class="group">
+                <input type="text" class="form-control" placeholder="username" id="username" name="username">
+                <i class="fa fa-user"></i>
+            </div>
+            <div class="group">
+                <input type="password" class="form-control" placeholder="password" id="password" name="password">
+                <i class="fa fa-key"></i>
+            </div>
+            <button type="submit" class="btn btn-default btn-block" id="login-button">LOGIN</button>
         </div>
-      </form>
-    </div>
+    </form>
+</div>
 
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script>
+    $('#login-button').click(function () {
+        $.ajax({
+            type: "post",
+            data: $("#login-form").serialize(),
+            url: "/dataAnalysis/login",
+            async: false,
+            datatype: "json",
+            success: function (data) {
+                var json = JSON.parse(data)
+                alert(json)
+                // if (data==="修改成功，请重新登陆") {
+                //     $.ajax({
+                //         type: "post",
+                //         url: "Logout.action",
+                //         success: function (date) {
+                //             window.location.href = "login.jsp"
+                //         }
+                //     })
+                // }
+            },
+            error: function (data) {
+                alert("失败")
+                var json = JSON.parse(data)
+                alert(json.toString())
+            }
+        })
+    })
+</script>
 </body>
 </html>

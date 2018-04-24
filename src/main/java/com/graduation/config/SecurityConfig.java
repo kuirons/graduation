@@ -1,13 +1,12 @@
 package com.graduation.config;
 
-import com.graduation.security.MyAccessDecisionManager;
-import com.graduation.security.MySaltSource;
-import com.graduation.security.MySecurityMetadataSource;
-import com.graduation.security.MyUserDetailsServer;
+import com.graduation.security.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
@@ -17,8 +16,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+
+import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 
 /**
  * 创建过滤器
@@ -51,6 +55,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
+  public MyAccessDenieHandler myAccessDenieHandler() {
+    return new MyAccessDenieHandler();
+  }
+
+  @Bean
   public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
     authenticationProvider.setUserDetailsService(userDetailsService());
@@ -78,9 +87,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .loginProcessingUrl("/login")
         .usernameParameter("username")
         .passwordParameter("password")
-        .defaultSuccessUrl("/static/index.html", true)
-        .failureUrl("/static/login.html")
         .permitAll()
+        .failureHandler(
+            (httpServletRequest, httpServletResponse, e) -> {
+              httpServletResponse.setContentType("application/json;charset=utf-8");
+              PrintWriter out = httpServletResponse.getWriter();
+              StringBuffer sb = new StringBuffer();
+              sb.append("{\"status\":\"error\",\"msg\":\"");
+              if (e instanceof UsernameNotFoundException || e instanceof BadCredentialsException) {
+                sb.append("用户名或密码输入错误，登录失败!");
+              } else if (e instanceof DisabledException) {
+                sb.append("账户被禁用，登录失败，请联系管理员!");
+              } else {
+                sb.append("登录失败!");
+              }
+              sb.append("\"}");
+              out.write(sb.toString());
+              out.flush();
+              out.close();
+            })
+        .successHandler(
+            (httpServletRequest, httpServletResponse, authentication) -> {
+              httpServletResponse.setContentType("application/json;charset=utf-8");
+              HttpSession session = httpServletRequest.getSession();
+              session.setAttribute(
+                  "username", ((UserDetails) authentication.getPrincipal()).getUsername());
+            })
         .and()
         .logout()
         .permitAll()
@@ -99,6 +131,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             })
         .and()
         .csrf()
-        .disable();
+        .disable()
+        .exceptionHandling()
+        .accessDeniedHandler(new MyAccessDenieHandler());
   }
 }

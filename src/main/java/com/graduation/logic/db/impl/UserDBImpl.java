@@ -17,6 +17,8 @@ public class UserDBImpl {
   public UserBean getUserByName(String userName) {
     Preconditions.checkNotNull(StringUtils.isBlank(userName), "用户名不能为空哦！！！");
     Result result = hbaseManager.getRow(TABLENAME, userName);
+    if (result.isEmpty() == true)
+      return null;
     return new UserBean()
         .setUserName(userName)
         .setPassword(new String(result.getValue("userinfo".getBytes(), "password".getBytes())));
