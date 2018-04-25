@@ -12,7 +12,6 @@ import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -85,6 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .formLogin()
         .loginPage("/static/login.html")
         .loginProcessingUrl("/login")
+        .defaultSuccessUrl("/static/index.html", true)
         .usernameParameter("username")
         .passwordParameter("password")
         .permitAll()
@@ -112,6 +112,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               HttpSession session = httpServletRequest.getSession();
               session.setAttribute(
                   "username", ((UserDetails) authentication.getPrincipal()).getUsername());
+              PrintWriter out = httpServletResponse.getWriter();
+              out.write("{\"status\":\"success\"}");
+              out.flush();
+              out.close();
             })
         .and()
         .logout()

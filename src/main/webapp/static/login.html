@@ -46,24 +46,15 @@
             async: false,
             datatype: "json",
             success: function (data) {
-                var json = JSON.parse(data)
-                alert(json)
-                // if (data==="修改成功，请重新登陆") {
-                //     $.ajax({
-                //         type: "post",
-                //         url: "Logout.action",
-                //         success: function (date) {
-                //             window.location.href = "login.jsp"
-                //         }
-                //     })
-                // }
+                if ("error" === data["status"]) {
+                    alert(data["msg"])
+                }
+                if ("success" === data["status"]) {
+                    window.location.href = "/dataAnalysis/static/index.html"
+                }
             },
-            error: function (data) {
-                alert("失败")
-                var json = JSON.parse(data)
-                alert(json.toString())
-            }
         })
+        return false;
     })
 </script>
 </body>
