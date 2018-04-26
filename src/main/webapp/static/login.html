@@ -43,7 +43,6 @@
             type: "post",
             data: $("#login-form").serialize(),
             url: "/dataAnalysis/login",
-            async: false,
             datatype: "json",
             success: function (data) {
                 if ("error" === data["status"]) {
@@ -52,7 +51,7 @@
                 if ("success" === data["status"]) {
                     window.location.href = "/dataAnalysis/static/index.html"
                 }
-            },
+            }
         })
         return false;
     })
