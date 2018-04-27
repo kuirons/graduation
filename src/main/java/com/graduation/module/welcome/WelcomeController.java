@@ -13,7 +13,7 @@ import java.io.IOException;
  * @date 2018/4/25 14:32
  */
 @Controller
-public class Welcome {
+public class WelcomeController {
   @RequestMapping(value = "/")
   public void welcome(HttpServletResponse response) throws IOException {
     response.sendRedirect("/dataAnalysis/static/login.html");

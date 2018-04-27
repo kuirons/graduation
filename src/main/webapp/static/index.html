@@ -62,20 +62,20 @@
 <!-- START SIDEBAR -->
 <div class="sidebar clearfix">
 
-    <ul class="sidebar-panel nav">
+    <ul class="sidebar-panel nav" id="main-panel">
         <li class="sidetitle">MAIN</li>
         <li><a href="index.html"><span class="icon color5"><i class="fa fa-home"></i></span>首页</a></li>
         <!--todo 这部分需要确定是否具有相关权限，才能显示-->
-        <!--<li><a href="javascript:void(0)" id="systemControl"><span class="icon color7"><i-->
-                <!--class="fa fa-shield"></i></span>系统管理<span-->
-                <!--class="caret"></span></a>-->
-            <!--<ul>-->
-                <!--<li><a href="javascript:void(0)" id="addUser">添加用户</a></li>-->
-                <!--<li><a href="javascript:void(0)" id="userManager">用户管理</a></li>-->
-                <!--<li><a href="javascript:void(0)" id="addRole">添加角色</a></li>-->
-                <!--<li><a href="javascript:void(0)" id="roleManager">角色管理</a></li>-->
-            <!--</ul>-->
-        <!--</li>-->
+        <li id="systemcontrol"><a href="javascript:void(0)"><span class="icon color7"><i
+                class="fa fa-shield"></i></span>系统管理<span
+                class="caret"></span></a>
+            <ul>
+                <li><a href="javascript:void(0)" id="addUser">添加用户</a></li>
+                <li><a href="javascript:void(0)" id="userManager">用户管理</a></li>
+                <li><a href="javascript:void(0)" id="addRole">添加角色</a></li>
+                <li><a href="javascript:void(0)" id="roleManager">角色管理</a></li>
+            </ul>
+        </li>
         <br>
         <br>
         <br>
@@ -107,7 +107,6 @@
         <br>
         <br>
     </ul>
-    <
 </div>
 <!-- END SIDEBAR -->
 <!-- //////////////////////////////////////////////////////////////////////////// -->
@@ -115,65 +114,6 @@
 <!-- //////////////////////////////////////////////////////////////////////////// -->
 <!-- START CONTENT -->
 <div class="content" id="content">
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
 </div>
 <!-- End Content -->
 <!-- //////////////////////////////////////////////////////////////////////////// -->
@@ -227,23 +167,23 @@ Summernote
 Flot Chart
 ================================================ -->
 <!-- main file -->
-<script type="text/javascript" src="js/flot-chart/flot-chart.js"></script>
+<!--<script type="text/javascript" src="js/flot-chart/flot-chart.js"></script>-->
 <!-- time.js -->
-<script type="text/javascript" src="js/flot-chart/flot-chart-time.js"></script>
-<!-- stack.js -->
-<script type="text/javascript" src="js/flot-chart/flot-chart-stack.js"></script>
-<!-- pie.js -->
-<script type="text/javascript" src="js/flot-chart/flot-chart-pie.js"></script>
-<!-- demo codes -->
-<script type="text/javascript" src="js/flot-chart/flot-chart-plugin.js"></script>
+<!--<script type="text/javascript" src="js/flot-chart/flot-chart-time.js"></script>-->
+<!--&lt;!&ndash; stack.js &ndash;&gt;-->
+<!--<script type="text/javascript" src="js/flot-chart/flot-chart-stack.js"></script>-->
+<!--&lt;!&ndash; pie.js &ndash;&gt;-->
+<!--<script type="text/javascript" src="js/flot-chart/flot-chart-pie.js"></script>-->
+<!--&lt;!&ndash; demo codes &ndash;&gt;-->
+<!--<script type="text/javascript" src="js/flot-chart/flot-chart-plugin.js"></script>-->
 
 <!-- ================================================
 Chartist
 ================================================ -->
-<!-- main file -->
-<script type="text/javascript" src="js/chartist/chartist.js"></script>
-<!-- demo codes -->
-<script type="text/javascript" src="js/chartist/chartist-plugin.js"></script>
+<!--&lt;!&ndash; main file &ndash;&gt;-->
+<!--<script type="text/javascript" src="js/chartist/chartist.js"></script>-->
+<!--&lt;!&ndash; demo codes &ndash;&gt;-->
+<!--<script type="text/javascript" src="js/chartist/chartist-plugin.js"></script>-->
 
 <!-- ================================================
 Easy Pie Chart
@@ -267,9 +207,9 @@ Rickshaw
 <!-- d3 -->
 <script src="js/rickshaw/d3.v3.js"></script>
 <!-- main file -->
-<script src="js/rickshaw/rickshaw.js"></script>
-<!-- demo codes -->
-<script src="js/rickshaw/rickshaw-plugin.js"></script>
+<!--<script src="js/rickshaw/rickshaw.js"></script>-->
+<!--&lt;!&ndash; demo codes &ndash;&gt;-->
+<!--<script src="js/rickshaw/rickshaw-plugin.js"></script>-->
 
 <!-- ================================================
 Data Tables
@@ -290,11 +230,11 @@ Kode Alert
 Gmaps
 ================================================ -->
 <!-- google maps api -->
-<script src="maps.google.com/maps/api/js?sensor=true"></script>
+<!--<script src="maps.google.com/maps/api/js?sensor=true"></script>-->
 <!-- main file -->
-<script src="js/gmaps/gmaps.js"></script>
-<!-- demo codes -->
-<script src="js/gmaps/gmaps-plugin.js"></script>
+<!--<script src="js/gmaps/gmaps.js"></script>-->
+<!--&lt;!&ndash; demo codes &ndash;&gt;-->
+<!--<script src="js/gmaps/gmaps-plugin.js"></script>-->
 
 <!-- ================================================
 jQuery UI
@@ -319,122 +259,39 @@ Bootstrap Date Range Picker
 <!-- ================================================
 Below codes are only for index widgets
 ================================================ -->
-<!-- Today Sales -->
 <script>
-
-    // set up our data series with 50 random data points
-
-    var seriesData = [[], [], []];
-    var random = new Rickshaw.Fixtures.RandomData(20);
-
-    for (var i = 0; i < 110; i++) {
-        random.addData(seriesData);
-    }
-
-    // instantiate our graph!
-
-    var graph = new Rickshaw.Graph({
-        element: document.getElementById("todaysales"),
-        renderer: 'bar',
-        series: [
-            {
-                color: "#33577B",
-                data: seriesData[0],
-                name: 'Photodune'
-            }, {
-                color: "#77BBFF",
-                data: seriesData[1],
-                name: 'Themeforest'
-            }, {
-                color: "#C1E0FF",
-                data: seriesData[2],
-                name: 'Codecanyon'
-            }
-        ]
-    });
-
-    graph.render();
-
-    var hoverDetail = new Rickshaw.Graph.HoverDetail({
-        graph: graph,
-        formatter: function (series, x, y) {
-            var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
-            var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-            var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
-            return content;
-        }
-    });
-
-</script>
-
-<!-- Today Activity -->
-<script>
-    // set up our data series with 50 random data points
-
-    var seriesData = [[], [], []];
-    var random = new Rickshaw.Fixtures.RandomData(20);
-
-    for (var i = 0; i < 50; i++) {
-        random.addData(seriesData);
-    }
-
-    // instantiate our graph!
-
-    var graph = new Rickshaw.Graph({
-        element: document.getElementById("todayactivity"),
-        renderer: 'area',
-        series: [
-            {
-                color: "#9A80B9",
-                data: seriesData[0],
-                name: 'London'
-            }, {
-                color: "#CDC0DC",
-                data: seriesData[1],
-                name: 'Tokyo'
-            }
-        ]
-    });
-
-    graph.render();
-
-    var hoverDetail = new Rickshaw.Graph.HoverDetail({
-        graph: graph,
-        formatter: function (series, x, y) {
-            var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
-            var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-            var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
-            return content;
-        }
-    });
-</script>
-
-<script>
-    // 角色管理
-    $("#roleManager").click(function () {
-        $("#content").load("/dataAnalysis/static/invoice.html", function (response, status, xhr) {
-            alert(status)
-        })
-    })
-</script>
-
-<script>
-    // 决定是否显示一些模块，注意顺序
     $(document).ready(function () {
-        // 这个决定是否显示系统管理
-        $.ajax({
-            type: "post",
-            url: "/dataAnalysis/systemControl",
-            datatype: "json",
-            success: function (data) {
-                alert('aaaa')
-            },
-            error:function (data) {
-                alert("aaaa")
-            }
-        })
+        systemControl()
+        userManager()
     })
-</script>
 
+    // 决定是否加载系统管理标签
+    function systemControl() {
+        $.ajax({
+                type: "post",
+                url: "/dataAnalysis/home/systemControl",
+                datatype: "json",
+                // ansy: false,
+                success: function (data) {
+                    if ("error" === data["status"]) {
+                        $("#systemcontrol").hide()
+                    }
+                    if ("success" === data["status"]) {
+                        $("#systemcontrol").show()
+                    }
+                },
+                error: function (data) {
+                }
+            }
+        )
+    }
+
+    // 请求用户管理页面
+    function userManager() {
+        $("#userManager").click(function () {
+            $("#content").load("/dataAnalysis/static/user-control.html")
+        })
+    }
+</script>
 </body>
 </html>

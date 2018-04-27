@@ -13,7 +13,7 @@ import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.*;
  * @author WuGYu
  * @date 2018/3/24 14:03
  */
-@Repository
+@Service
 public class HbaseManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(HbaseManager.class);
 
@@ -211,6 +211,7 @@ public class HbaseManager {
   public Result selectFirstResultRow(String tableName, FilterList filterList) {
     if (StringUtils.isBlank(tableName)) return null;
     Table table = null;
+    Result rs = null;
     try {
       table = getTable(tableName);
       Scan scan = new Scan();
@@ -220,9 +221,8 @@ public class HbaseManager {
       ResultScanner scanner = table.getScanner(scan);
       Iterator<Result> iterator = scanner.iterator();
       if (iterator.hasNext()) {
-        Result rs = iterator.next();
+        rs = iterator.next();
         scanner.close();
-        return rs;
       } else scanner.close();
     } catch (IOException e) {
       LOGGER.error("获取表:{}第一行记录失败", tableName, e);
@@ -232,8 +232,35 @@ public class HbaseManager {
       } catch (IOException e) {
         e.printStackTrace();
       }
-      return null;
     }
+    return rs;
+  }
+
+  public List<Result> scanAllTable(String tableName) {
+    List<Result> results = new ArrayList<>();
+    if (StringUtils.isBlank(tableName)) return null;
+    Table table = null;
+    try {
+      table = getTable(tableName);
+      // 这里直接将scan置空，表示获取全部的数据
+      Scan scan = new Scan();
+      ResultScanner scanner = table.getScanner(scan);
+      Iterator<Result> iterator = scanner.iterator();
+      if (iterator.hasNext()) {
+        Result rs = iterator.next();
+        results.add(rs);
+      }
+      scanner.close();
+    } catch (IOException e) {
+      LOGGER.error("获取表:{}记录失败", tableName, e);
+    } finally {
+      try {
+        table.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    return results;
   }
 
   public long asynPut(String tableName, List<Put> puts) throws Exception {

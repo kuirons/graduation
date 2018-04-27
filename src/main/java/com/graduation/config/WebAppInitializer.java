@@ -1,6 +1,9 @@
 package com.graduation.config;
 
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.Filter;
 
 /**
  * @author WuGYu
@@ -8,7 +11,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
  */
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
   protected Class<?>[] getRootConfigClasses() {
-    return new Class[] {RootConfig.class,SecurityConfig.class};
+    return new Class[] {RootConfig.class, SecurityConfig.class};
   }
 
   protected Class<?>[] getServletConfigClasses() {
@@ -19,4 +22,9 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     return new String[] {"/"};
   }
 
+  @Override
+  protected Filter[] getServletFilters() {
+    // 默认不是utf-8，还得自己转
+    return new Filter[] {new CharacterEncodingFilter("UTF-8", true, true)};
+  }
 }

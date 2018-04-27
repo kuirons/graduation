@@ -21,7 +21,7 @@ public class MyAccessDenieHandler implements AccessDeniedHandler {
       AccessDeniedException e)
       throws IOException, ServletException {
     // 权限不足交前端处理
-    // httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//    httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
     httpServletResponse.setContentType("application/json;charset=UTF-8");
     PrintWriter out = httpServletResponse.getWriter();
     out.write("{\"status\":\"error\",\"msg\":\"权限不足，请联系管理员!\"}");

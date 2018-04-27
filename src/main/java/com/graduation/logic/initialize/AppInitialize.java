@@ -10,8 +10,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
-
 /** Created by kuirons on 18-4-6 */
 @Service
 public class AppInitialize implements InitializingBean {
@@ -52,12 +50,20 @@ public class AppInitialize implements InitializingBean {
         put = new Put("admin".getBytes());
         put.addColumn(
             "userinfo".getBytes(), "password".getBytes(), MD5Util.getMd5String("admin").getBytes());
+        put.addColumn("userinfo".getBytes(), "showname".getBytes(), "超级管理员".getBytes());
+        put.addColumn("userinfo".getBytes(), "phone".getBytes(), "13548251111".getBytes());
+        put.addColumn(
+            "userinfo".getBytes(), "description".getBytes(), "这是超级管理员，可以为所欲为，而且你不能删除他".getBytes());
         families = new String[] {"userinfo"};
         break;
       case "graduation_role":
         msg = "角色";
         put = new Put("ADMIN".getBytes());
-        put.addColumn("roleinfo".getBytes(), "description".getBytes(), "管理员".getBytes());
+        put.addColumn(
+            "roleinfo".getBytes(),
+            "description".getBytes(),
+            "这是超级角色，可以为所欲为，你应该把所有的权限都给他，或者，把最高的权限给他".getBytes());
+        put.addColumn("roleinfo".getBytes(), "rolename".getBytes(), "管理员".getBytes());
         families = new String[] {"roleinfo"};
         break;
       case "graduation_jurisdiction":
