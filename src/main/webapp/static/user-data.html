@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="col-sm-4 col-md-4" id="rui1c1">
+    <div class="panel panel-default">
+        <!--面板标题，主要放用户名和删除按钮-->
+        <div class="panel-title" id="username">
+            <ui class="panel-tools">
+                <li data-toggle="tooltip" title="修改信息" id="change-user-infos">
+                    <a class="icon">
+                        <i class="fa fa-pencil">
+                        </i>
+                    </a>
+                </li>
+                <li data-toggle="tooltip" title="删&nbsp;除">
+                    <a class="icon">
+                        <i class="fa fa-trash">
+                        </i>
+                    </a>
+                </li>
+            </ui>
+        </div>
+        <!--面板主体-->
+        <div class="panel-body">
+            <p>
+                <img src="img/head/head1.png" alt="IMG" class="img-circle center-block"
+                     style="width: 15%;height: 15%">
+            </p>
+            <ui class="basic-list">
+                <li id="showname">
+                </li>
+                <li id="phone">
+                </li>
+                <li id="roleinfos">
+                </li>
+                <li id="description">
+                </li>
+            </ui>
+        </div>
+    </div>
+</div>
+<script>
+    $("#change-user-infos").click(function () {
+        var username = $("#showname").text()
+        $("#content").load("/dataAnalysis/static/change-userinfo.html", function () {
+            $("#changed-username").append("您正在修改的"+username.trim())
+            // 这里找一下全部的角色
+            $.ajax({
+                type: "post",
+                url: "/dataAnalysis/role/getRoleData",
+                datatype: "json",
+                success: function (data) {
+                    if ("error" === data["status"]) {
+                        alert(data["msg"])
+                    }
+                    if ("success" === data["status"]) {
+                        window.location.href = "/dataAnalysis/static/index.html"
+                    }
+                }
+            })
+        })
+    })
+</script>
+</body>
+</html>

@@ -43,10 +43,7 @@ public class UserDBImpl {
                             result.getValue("userinfo".getBytes(), "description".getBytes())))
                     .setPhone(
                         CommonUtil.bytesToString(
-                            result.getValue("userinfo".getBytes(), "phone".getBytes())))
-                    .setShowName(
-                        CommonUtil.bytesToString(
-                            result.getValue("userinfo".getBytes(), "showname".getBytes())))));
+                            result.getValue("userinfo".getBytes(), "phone".getBytes())))));
     return userBeans;
   }
 }

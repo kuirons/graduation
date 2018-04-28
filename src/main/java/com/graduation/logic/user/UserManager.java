@@ -18,24 +18,23 @@ import java.util.List;
 @Service
 public class UserManager {
   @Autowired UserDBImpl userDB;
-  @Autowired
-  RoleManager roleManager;
+  @Autowired RoleManager roleManager;
 
   /** @return json */
-  public String getAllUserInfo() {
+  public  List<UserData> getAllUserInfo() {
     List<UserData> userDatas = new ArrayList<>();
     List<UserBean> allUser = userDB.getAllUser();
-    allUser.forEach(userBean -> {
-      UserData userData = new UserData();
-      List<String> roles = roleManager.getRolesByUserName(userBean.getUserName());
-      userData.setShowName(userBean.getShowName());
-      userData.setPhone(userBean.getPhone());
-      userData.setDescription(userBean.getDescription());
-      userData.setRoleInfos(roles);
-      userDatas.add(userData);
-
-    });
+    allUser.forEach(
+        userBean -> {
+          UserData userData = new UserData();
+          List<String> roles = roleManager.getRolesByUserName(userBean.getUserName());
+          userData.setPhone(userBean.getPhone());
+          userData.setDescription(userBean.getDescription());
+          userData.setRoleInfos(roles);
+          userData.setUserName(userBean.getUserName());
+          userDatas.add(userData);
+        });
     if (userDatas == null || userDatas.isEmpty()) return null;
-    return JSON.toJSONString(userDatas);
+    return userDatas;
   }
 }

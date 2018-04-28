@@ -9,124 +9,117 @@
 </head>
 <body>
 <!-- START CONTENT -->
-<div class="content">
+<!-- Start Page Header -->
+<div class="page-header">
+    <h1 class="title">修改用户信息</h1>
+    <ol class="breadcrumb">
+        <li><a href="index.html">主页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">修改用户信息</li>
+    </ol>
+</div>
+<!-- End Page Header -->
 
-    <!-- Start Page Header -->
-    <div class="page-header">
-        <h1 class="title">修改用户信息</h1>
-        <ol class="breadcrumb">
-            <li><a href="index.html">主页</a></li>
-            <li><a href="#">系统管理</a></li>
-            <li class="active">修改用户信息</li>
-        </ol>
-    </div>
-    <!-- End Page Header -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START CONTAINER -->
+<!--要在这里添加信息-->
+<div class="container-padding">
+    <!-- Start Row -->
+    <div class="row">
+        <!--<div class="panel panel-default">-->
+        <div class="panel panel-default">
 
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
-    <!-- START CONTAINER -->
-    <!--要在这里添加信息-->
-    <div class="container-padding">
-        <!-- Start Row -->
-        <div class="row">
-            <!--<div class="panel panel-default">-->
-            <div class="panel panel-default">
+            <div class="panel-title" id="changed-username" name="changed-username">
+            </div>
 
-                <div class="panel-title">
-                    被修改的人的名字
-                </div>
-
-                <div class="panel-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="example3" class="form-label">手机号码</label>
-                            <input type="text" class="form-control form-control-line" id="example3">
+            <div class="panel-body">
+                <form id="new-userinfos">
+                    <div class="form-group">
+                        <label for="changePhone" class="form-label">手机号码</label>
+                        <input type="text" class="form-control form-control-line" id="changePhone" name="changePhone">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">备注</label>
+                        <textarea class="form-control form-control-line" rows="5" id="changeDescription"></textarea>
+                    </div>
+                    <div class="form-group" id="change-user-role-infos">
+                        <p>角色</p>
+                        <div class="checkbox checkbox-primary checkbox-inline">
+                            <input id="changeRole1" type="checkbox" value="1" name="changeRoleInfos[]">
+                            <label for="changeRole1">
+                                管理员
+                            </label>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">备注</label>
-                            <textarea class="form-control form-control-line" rows="5"></textarea>
+                        <div class="checkbox checkbox-primary checkbox-inline">
+                            <input id="changeRole2" type="checkbox" value="2" name="changeRoleInfos[]">
+                            <label for="changeRole2">
+                                测试1
+                            </label>
                         </div>
-                        <div class="form-group">
-                            <p>角色</p>
-                            <div class="checkbox checkbox-primary checkbox-inline">
-                                <input id="checkbox101" type="checkbox" value="1">
-                                <label for="checkbox101">
-                                    管理员
-                                </label>
-                            </div>
-                            <div class="checkbox checkbox-primary checkbox-inline">
-                                <input id="checkbox102" type="checkbox" value="2">
-                                <label for="checkbox102">
-                                    管理员
-                                </label>
-                            </div>
-                            <div class="checkbox checkbox-primary checkbox-inline">
-                                <input id="checkbox103" type="checkbox" value="3">
-                                <label for="checkbox103">
-                                    管理员
-                                </label>
-                            </div>
+                        <div class="checkbox checkbox-primary checkbox-inline">
+                            <input id="changeRole3" type="checkbox" value="3" name="changeRoleInfos[]">
+                            <label for="changeRole3">
+                                测试2
+                            </label>
                         </div>
-                        <button type="submit" class="btn btn-default">保存修改</button>
-                    </form>
-
-                </div>
+                    </div>
+                    <button type="submit" class="btn btn-default" id="change-userinfo-save">保存修改</button>
+                </form>
 
             </div>
-            <!--</div>-->
+
         </div>
-        <!--这是为了留白，不至于太难看-->
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <!-- End Row -->
+        <!--</div>-->
     </div>
-    <!-- END CONTAINER -->
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
-
-
-    <!-- Start Footer -->
-    <div class="row footer">
-        <div class="col-md-6 text-right">
-            Graduation
-        </div>
-    </div>
-    <!-- End Footer -->
-
-
+    <!--这是为了留白，不至于太难看-->
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <!-- End Row -->
 </div>
-<!-- End Content -->
+<!-- END CONTAINER -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+
+
+<!-- Start Footer -->
+<div class="row footer">
+    <div class="col-md-6 text-right">
+        Graduation
+    </div>
+</div>
+<!-- End Footer -->
 
 <!-- ================================================
 jQuery Library
@@ -162,5 +155,19 @@ Moment.js
 Bootstrap Date Range Picker
 ================================================ -->
 <script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
+<script>
+    // 提交修改信息
+    $("#change-userinfo-save").click(function () {
+        $.ajax({
+            type: "post",
+            data: $("#new-userinfos").serialize(),
+            url: "/dataAnalysis/user/changeUserInfos",
+            datatype: "json",
+            success: function (data) {
+
+            }
+        })
+    })
+</script>
 </body>
 </html>

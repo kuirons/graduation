@@ -50,7 +50,6 @@ public class AppInitialize implements InitializingBean {
         put = new Put("admin".getBytes());
         put.addColumn(
             "userinfo".getBytes(), "password".getBytes(), MD5Util.getMd5String("admin").getBytes());
-        put.addColumn("userinfo".getBytes(), "showname".getBytes(), "超级管理员".getBytes());
         put.addColumn("userinfo".getBytes(), "phone".getBytes(), "13548251111".getBytes());
         put.addColumn(
             "userinfo".getBytes(), "description".getBytes(), "这是超级管理员，可以为所欲为，而且你不能删除他".getBytes());
