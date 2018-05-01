@@ -19,10 +19,10 @@ import java.util.List;
 public class RoleController {
   @Autowired RoleDBImpl roleDBImpl;
 
-  @RequestMapping("/getRoleData")
+  @RequestMapping(value = "/getRoleData", produces = "application/json;charset=UTF-8")
   @ResponseBody
   public String getAllRoleData() {
-      List<RoleBean> roleInfos = roleDBImpl.getAllRoleInfos();
-      return JSON.toJSONString(roleInfos);
+    List<RoleBean> roleInfos = roleDBImpl.getAllRoleInfos();
+    return JSON.toJSONString(roleInfos);
   }
 }

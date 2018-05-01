@@ -26,6 +26,7 @@ public class RoleDBImpl {
               CommonUtil.bytesToString(
                   result.getValue("roleinfo".getBytes(), "description".getBytes())));
           roleBean.setRole(CommonUtil.bytesToString(result.getRow()));
+          roleBeans.add(roleBean);
         });
     return roleBeans;
   }

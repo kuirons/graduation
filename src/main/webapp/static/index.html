@@ -263,6 +263,7 @@ Below codes are only for index widgets
     $(document).ready(function () {
         systemControl()
         userManager()
+        addUser()
     })
 
     // 决定是否加载系统管理标签
@@ -290,6 +291,12 @@ Below codes are only for index widgets
     function userManager() {
         $("#userManager").click(function () {
             $("#content").load("/dataAnalysis/static/user-control.html")
+        })
+    }
+    // 请求添加用户界面
+    function addUser() {
+        $("#addUser").click(function () {
+            $("#content").load("/dataAnalysis/static/add-user.html")
         })
     }
 </script>

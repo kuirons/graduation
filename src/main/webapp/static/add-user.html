@@ -8,129 +8,110 @@
     <link href="css/root.css" rel="stylesheet">
 </head>
 <body>
-<!-- START CONTENT -->
-<div class="content">
+<!-- Start Page Header -->
+<div class="page-header">
+    <h1 class="title">添加用户</h1>
+    <ol class="breadcrumb">
+        <li><a href="index.html">主页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">添加用户</li>
+    </ol>
+</div>
+<!-- End Page Header -->
 
-    <!-- Start Page Header -->
-    <div class="page-header">
-        <h1 class="title">添加用户</h1>
-        <ol class="breadcrumb">
-            <li><a href="index.html">主页</a></li>
-            <li><a href="#">系统管理</a></li>
-            <li class="active">添加用户</li>
-        </ol>
-    </div>
-    <!-- End Page Header -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START CONTAINER -->
+<!--要在这里添加信息-->
+<div class="container-padding">
+    <!-- Start Row -->
+    <div class="row">
+        <!--<div class="panel panel-default">-->
+        <div class="panel panel-default">
 
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
-    <!-- START CONTAINER -->
-    <!--要在这里添加信息-->
-    <div class="container-padding">
-        <!-- Start Row -->
-        <div class="row">
-            <!--<div class="panel panel-default">-->
-            <div class="panel panel-default">
+            <div class="panel-title">
+                请输入以下信息:
+            </div>
 
-                <div class="panel-title">
-                    请输入以下信息:
-                </div>
-
-                <div class="panel-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="addusername" class="form-label">用户名</label>
-                            <input type="text" class="form-control form-control-line" id="addusername">
-                        </div>
-                        <div class="form-group">
-                            <label for="addphonenum" class="form-label">手机号码</label>
-                            <input type="text" class="form-control form-control-line" id="addphonenum">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">备注</label>
-                            <textarea class="form-control form-control-line" rows="5"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <p>角色</p>
-                            <div class="checkbox checkbox-primary checkbox-inline">
-                                <input id="checkbox101" type="checkbox" value="1">
-                                <label for="checkbox101">
-                                    管理员
-                                </label>
-                            </div>
-                            <div class="checkbox checkbox-primary checkbox-inline">
-                                <input id="checkbox102" type="checkbox" value="2">
-                                <label for="checkbox102">
-                                    管理员
-                                </label>
-                            </div>
-                            <div class="checkbox checkbox-primary checkbox-inline">
-                                <input id="checkbox103" type="checkbox" value="3">
-                                <label for="checkbox103">
-                                    管理员
-                                </label>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-default">添加用户</button>
-                    </form>
-
-                </div>
+            <div class="panel-body">
+                <form id="add-new-userinfos" name="add-new-userinfos">
+                    <div class="form-group">
+                        <label for="addusername" class="form-label">用户名</label>
+                        <input type="text" class="form-control form-control-line" id="addusername" name="addusername">
+                    </div>
+                    <div class="form-group">
+                        <label for="adduserpassword" class="form-label">密码</label>
+                        <input type="password" class="form-control form-control-line" id="adduserpassword"
+                               name="adduserpassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="addphonenum" class="form-label">手机号码</label>
+                        <input type="text" class="form-control form-control-line" id="addphonenum" name="addphonenum">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">备注</label>
+                        <textarea class="form-control form-control-line" rows="5" id="adduserdescription"
+                                  name="adduserdescription"></textarea>
+                    </div>
+                    <div class="form-group" id="add-user-role-infos">
+                        <p>角色</p>
+                    </div>
+                    <button type="button" class="btn btn-default" id="add-userinfo-save">添加用户</button>
+                </form>
 
             </div>
-            <!--</div>-->
+
         </div>
-        <!--这是为了留白，不至于太难看-->
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <!-- End Row -->
+        <!--</div>-->
     </div>
-    <!-- END CONTAINER -->
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
-
-
-    <!-- Start Footer -->
-    <div class="row footer">
-        <div class="col-md-6 text-right">
-            Graduation
-        </div>
-    </div>
-    <!-- End Footer -->
-
-
+    <!--这是为了留白，不至于太难看-->
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <!-- End Row -->
 </div>
-<!-- End Content -->
+<!-- END CONTAINER -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+
+
+<!-- Start Footer -->
+<div class="row footer">
+    <div class="col-md-6 text-right">
+        Graduation
+    </div>
+</div>
+<!-- End Footer -->
 
 <!-- ================================================
 jQuery Library
@@ -166,5 +147,48 @@ Moment.js
 Bootstrap Date Range Picker
 ================================================ -->
 <script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        getAllRole()
+    })
+
+    // 这里请求现有的角色信息
+    function getAllRole() {
+        $.ajax({
+            type: "post",
+            url: "/dataAnalysis/role/getRoleData",
+            datatype: "json",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#add-user-role-infos").append('<div class="checkbox checkbox-primary checkbox-inline">\n' +
+                        '                            <input id="addRole' + i + '" type="checkbox" value="' + data[i]["role"] + '" name="addRoleInfos[]">\n' +
+                        '                            <label for="addRole' + i + '">\n' + data[i]["role"] +
+                        '                                \n' +
+                        '                            </label>\n' +
+                        '                        </div>')
+                }
+            }
+        })
+    }
+</script>
+<script>
+    // 提交信息
+    $("#add-userinfo-save").click(function () {
+        $.ajax({
+            type: "post",
+            data: $("#add-new-userinfos").serialize(),
+            url: "/dataAnalysis/user/addUserInfos",
+            datatype: "json",
+            async: false,
+            success: function () {
+                $("#content").load("/dataAnalysis/static/user-control.html")
+            },
+            error: function () {
+                alert("添加用户失败，请联系管理员")
+                $("#content").load("/dataAnalysis/static/user-control.html")
+            }
+        })
+    })
+</script>
 </body>
 </html>

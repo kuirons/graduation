@@ -49,6 +49,7 @@
                     alert(data["msg"])
                 }
                 if ("success" === data["status"]) {
+                    // todo 这里可能还需要处理成ajax，因为这里只判断了登录密码是否正确，但是没有判断是否有权限能够跳转到index，现在如果没有权限的话跳转后是默认的界面
                     window.location.href = "/dataAnalysis/static/index.html"
                 }
             }

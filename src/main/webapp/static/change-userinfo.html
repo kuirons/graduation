@@ -40,30 +40,13 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">备注</label>
-                        <textarea class="form-control form-control-line" rows="5" id="changeDescription"></textarea>
+                        <textarea class="form-control form-control-line" rows="5" id="changeDescription"
+                                  name="changeDescription"></textarea>
                     </div>
                     <div class="form-group" id="change-user-role-infos">
                         <p>角色</p>
-                        <div class="checkbox checkbox-primary checkbox-inline">
-                            <input id="changeRole1" type="checkbox" value="1" name="changeRoleInfos[]">
-                            <label for="changeRole1">
-                                管理员
-                            </label>
-                        </div>
-                        <div class="checkbox checkbox-primary checkbox-inline">
-                            <input id="changeRole2" type="checkbox" value="2" name="changeRoleInfos[]">
-                            <label for="changeRole2">
-                                测试1
-                            </label>
-                        </div>
-                        <div class="checkbox checkbox-primary checkbox-inline">
-                            <input id="changeRole3" type="checkbox" value="3" name="changeRoleInfos[]">
-                            <label for="changeRole3">
-                                测试2
-                            </label>
-                        </div>
                     </div>
-                    <button type="submit" class="btn btn-default" id="change-userinfo-save">保存修改</button>
+                    <button type="button" class="btn btn-default" id="change-userinfo-save">保存修改</button>
                 </form>
 
             </div>
@@ -156,6 +139,30 @@ Bootstrap Date Range Picker
 ================================================ -->
 <script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
 <script>
+    $(document).ready(function () {
+        getAllRole()
+    })
+
+    // 这里请求现有的角色信息
+    function getAllRole() {
+        $.ajax({
+            type: "post",
+            url: "/dataAnalysis/role/getRoleData",
+            datatype: "json",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#change-user-role-infos").append('<div class="checkbox checkbox-primary checkbox-inline">\n' +
+                        '                            <input id="changeRole' + i + '" type="checkbox" value="' + data[i]["role"] + '" name="changeRoleInfos[]">\n' +
+                        '                            <label for="changeRole' + i + '">\n' + data[i]["role"] +
+                        '                                \n' +
+                        '                            </label>\n' +
+                        '                        </div>')
+                }
+            }
+        })
+    }
+</script>
+<script>
     // 提交修改信息
     $("#change-userinfo-save").click(function () {
         $.ajax({
@@ -163,8 +170,13 @@ Bootstrap Date Range Picker
             data: $("#new-userinfos").serialize(),
             url: "/dataAnalysis/user/changeUserInfos",
             datatype: "json",
-            success: function (data) {
-
+            async: false,
+            success: function () {
+                $("#content").load("/dataAnalysis/static/user-control.html")
+            },
+            error: function () {
+                alert("修改信息失败，请联系管理员")
+                $("#content").load("/dataAnalysis/static/user-control.html")
             }
         })
     })

@@ -17,4 +17,12 @@ public class RoleManager {
     List<UserRoleBean> roleInfos = userRoleDBImpl.getUserRoleByUserName(userName);
     return roleInfos.stream().map(UserRoleBean::getRoleName).collect(Collectors.toList());
   }
+
+  public boolean updateUserRoleInfos(String[] changeRoleInfos, String username) {
+    return userRoleDBImpl.updateUserRoleInfos(changeRoleInfos, username);
+  }
+
+  public boolean addUserRoleInfos(String[] addRoleInfos, String username) {
+    return userRoleDBImpl.addUserInfos(addRoleInfos, username);
+  }
 }

@@ -4,7 +4,9 @@ import com.google.common.base.Preconditions;
 import com.graduation.data.bean.UserBean;
 import com.graduation.logic.db.HbaseManager;
 import com.graduation.util.CommonUtil;
+import com.graduation.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,5 +47,32 @@ public class UserDBImpl {
                         CommonUtil.bytesToString(
                             result.getValue("userinfo".getBytes(), "phone".getBytes())))));
     return userBeans;
+  }
+
+  public boolean updateUserInfos(String changeDescription, String changePhone, String username) {
+    Put put = new Put(username.getBytes());
+    if (changeDescription == null && changePhone == null) return false;
+    if (changePhone != null)
+      put.addColumn("userinfo".getBytes(), "phone".getBytes(), changePhone.getBytes());
+    if (changeDescription != null)
+      put.addColumn("userinfo".getBytes(), "description".getBytes(), changeDescription.getBytes());
+    hbaseManager.synPut(TABLENAME, put);
+    return true;
+  }
+
+  public boolean addUserInfos(
+      String userName, String addPhonenum, String addUserDescription, String password) {
+    // 先初步设定为必须提供全部的信息
+    if (StringUtils.isBlank(userName)
+        || StringUtils.isBlank(addPhonenum)
+        || StringUtils.isBlank(addUserDescription)
+        || StringUtils.isBlank(password)) return false;
+    Put put = new Put(userName.getBytes());
+    put.addColumn(
+        "userinfo".getBytes(), "password".getBytes(), MD5Util.getMd5String(password).getBytes());
+    put.addColumn("userinfo".getBytes(), "phone".getBytes(), addPhonenum.getBytes());
+    put.addColumn("userinfo".getBytes(), "description".getBytes(), addUserDescription.getBytes());
+    hbaseManager.synPut(TABLENAME, put);
+    return true;
   }
 }

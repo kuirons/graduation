@@ -17,13 +17,13 @@ import java.util.List;
  */
 @Service
 public class UserManager {
-  @Autowired UserDBImpl userDB;
+  @Autowired UserDBImpl userDBImpl;
   @Autowired RoleManager roleManager;
 
   /** @return json */
-  public  List<UserData> getAllUserInfo() {
+  public List<UserData> getAllUserInfo() {
     List<UserData> userDatas = new ArrayList<>();
-    List<UserBean> allUser = userDB.getAllUser();
+    List<UserBean> allUser = userDBImpl.getAllUser();
     allUser.forEach(
         userBean -> {
           UserData userData = new UserData();
@@ -36,5 +36,19 @@ public class UserManager {
         });
     if (userDatas == null || userDatas.isEmpty()) return null;
     return userDatas;
+  }
+
+  public boolean changeUserInfos(
+      String changePhone, String[] changeRoleInfos, String changeDescription, String username) {
+    if ((!userDBImpl.updateUserInfos(changeDescription, changePhone, username))
+        || (!roleManager.updateUserRoleInfos(changeRoleInfos, username))) return false;
+    return true;
+  }
+
+  public boolean addNewUserInfos(
+      String userName, String addPhonenum, String addUserDescription, String[] addRoleInfos,String password) {
+    if ((!userDBImpl.addUserInfos(userName, addPhonenum, addUserDescription,password))
+        || (!roleManager.addUserRoleInfos(addRoleInfos,userName))) return false;
+    return true;
   }
 }

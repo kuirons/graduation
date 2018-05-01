@@ -246,7 +246,7 @@ public class HbaseManager {
       Scan scan = new Scan();
       ResultScanner scanner = table.getScanner(scan);
       Iterator<Result> iterator = scanner.iterator();
-      if (iterator.hasNext()) {
+      while (iterator.hasNext()) {
         Result rs = iterator.next();
         results.add(rs);
       }

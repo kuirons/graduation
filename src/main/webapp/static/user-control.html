@@ -35,31 +35,28 @@
 <div class="container-padding">
     <!-- Start Row -->
     <!--这里初步规划1行3个，大概差不多吧-->
-    <div class="row" id="rui1">
+    <div class="row" id="row">
     </div>
-    <div class="row" id="rui2">
-    </div>
-    <div class="row" id="rui3">
-    </div>
-    <!--这是为了留白，不至于太难看-->
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <!-- End Row -->
+</div>
+<!--这是为了留白，不至于太难看-->
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!-- End Row -->
 </div>
 <!-- END CONTAINER -->
 <!-- //////////////////////////////////////////////////////////////////////////// -->
@@ -76,6 +73,7 @@
 jQuery Library
 ================================================ -->
 <script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.tmpl.min.js"></script>
 
 <!-- ================================================
 Bootstrap Core JavaScript File
@@ -106,6 +104,54 @@ Moment.js
 Bootstrap Date Range Picker
 ================================================ -->
 <script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
+<!--这里定义一个模板-->
+<script id='user-date' type='text/html'>
+    <div class="col-sm-4 col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-title">
+                ${userName}
+                <ui class="panel-tools">
+                    <li data-toggle="tooltip" title="修改信息">
+                        <a class="icon">
+                            <i class="fa fa-pencil">
+                            </i>
+                        </a>
+                    </li>
+                    <li data-toggle="tooltip" title="删&nbsp;除">
+                        <a class="icon">
+                            <i class="fa fa-trash">
+                            </i>
+                        </a>
+                    </li>
+                </ui>
+            </div>
+            <div class="panel-body">
+                <p>
+                    <img src="img/head/head1.png" alt="IMG" class="img-circle center-block"
+                         style="width: 15%;height: 15%">
+                </p>
+                <ui class="basic-list">
+                    <li>
+                        用户名：${userName}
+                    </li>
+                    <li>
+                        手机：${phone}
+                    </li>
+                    <li>
+                        角色：&nbsp;
+                        {{each(i,roleinfo) roleInfos}}
+                        <a href="#" class="btn btn-rounded btn-default btn-sm">${roleinfo}</a>
+                        {{/each}}
+                    </li>
+                    <li>
+                        备注：${description}
+                    </li>
+                </ui>
+            </div>
+        </div>
+    </div>
+
+</script>
 <script>
     $(document).ready(function () {
         getUserData()
@@ -113,29 +159,14 @@ Bootstrap Date Range Picker
 
     // 加载该页面的时候从后台获取相关数据信息
     function getUserData() {
+        var userDataTmpl = $('#user-date').html()
+        $.template("userData", userDataTmpl)
         $.ajax({
                 type: "post",
                 url: "/dataAnalysis/user/getUserData",
+                async: false,
                 success: function (data) {
-                    var size = data.length
-                    for (var i = 0; i < 9; i++) {
-                        var row = i / 3 + 1
-                        var rowP = "#rui" + row
-                        if (i < size) {
-                            $(rowP).load("/dataAnalysis/static/user-data.html", function () {
-                                $("#username").append(data[0]["userName"])
-                                $("#showname").append('用户名：' + data[0]["userName"])
-                                $("#phone").append('手机：' + data[0]["phone"])
-                                $("#description").append('备注：' + data[0]["description"])
-                                $("#roleinfos").append('角色：&nbsp;')
-                                for (var j = 0; j < data[0]["roleInfos"].length; j++) {
-                                    $("#roleinfos").append('<a href="#" class="btn btn-rounded btn-default btn-sm">' + data[0]["roleInfos"][j] + '</a>')
-                                }
-                            })
-                        } else {
-                            $(rowP).hide()
-                        }
-                    }
+                    $.tmpl("userData", data).appendTo("#row")
                 },
                 error: function (data) {
                     alert(data["status"])
