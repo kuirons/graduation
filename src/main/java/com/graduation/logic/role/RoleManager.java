@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 public class RoleManager {
   @Autowired UserRoleDBImpl userRoleDBImpl;
 
-  public List<String> getRolesByUserName(String userName) {
+  public List<UserRoleBean> getRolesByUserName(String userName) {
     List<UserRoleBean> roleInfos = userRoleDBImpl.getUserRoleByUserName(userName);
-    return roleInfos.stream().map(UserRoleBean::getRoleName).collect(Collectors.toList());
+    return roleInfos;
   }
 
   public boolean updateUserRoleInfos(String[] changeRoleInfos, String username) {

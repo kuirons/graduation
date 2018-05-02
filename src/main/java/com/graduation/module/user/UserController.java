@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -33,7 +34,7 @@ public class UserController {
     return JSON.toJSONString(allUserInfo);
   }
 
-  // 如果为空则表示不更改
+  // todo 如果为空则表示不更改,这里其实有问题，需要上锁
   @RequestMapping(value = "/changeUserInfos", produces = "application/json;charset=UTF-8")
   @ResponseBody
   public void changeUserInfos(
@@ -47,7 +48,7 @@ public class UserController {
         changePhone,
         changeRoleInfos,
         changeDescription,
-        (String) request.getSession().getAttribute("username"))) response.setStatus(500);
+        (String) request.getSession().getAttribute("changeUserName"))) response.setStatus(500);
     else {
       // 这里直接返回字符串是不行的
       PrintWriter out = response.getWriter();
@@ -67,7 +68,8 @@ public class UserController {
       @RequestParam(value = "adduserpassword") String addUserPassword,
       HttpServletResponse response)
       throws IOException {
-    if (!userManager.addNewUserInfos(userName, addPhonenum, addUserDescription, addRoleInfos,addUserPassword))
+    if (!userManager.addNewUserInfos(
+        userName, addPhonenum, addUserDescription, addRoleInfos, addUserPassword))
       response.setStatus(500);
     else {
       // 这里直接返回字符串是不行的
@@ -76,5 +78,20 @@ public class UserController {
       out.flush();
       out.close();
     }
+  }
+
+  @RequestMapping(value = "/saveChangeUserName", produces = "application/json;charset=UTF-8")
+  @ResponseBody
+  public void saveChangeUserName(
+      @RequestParam(value = "changeusername") String changeUserName,
+      HttpServletRequest request,
+      HttpServletResponse response)
+      throws IOException {
+    HttpSession session = request.getSession();
+    session.setAttribute("changeUserName", changeUserName.trim());
+    PrintWriter out = response.getWriter();
+    out.write("{\"status\":\"success\"}");
+    out.flush();
+    out.close();
   }
 }

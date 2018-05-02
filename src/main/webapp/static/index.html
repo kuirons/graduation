@@ -264,6 +264,8 @@ Below codes are only for index widgets
         systemControl()
         userManager()
         addUser()
+        roleManager()
+        addRole()
     })
 
     // 决定是否加载系统管理标签
@@ -293,10 +295,24 @@ Below codes are only for index widgets
             $("#content").load("/dataAnalysis/static/user-control.html")
         })
     }
+
     // 请求添加用户界面
     function addUser() {
         $("#addUser").click(function () {
             $("#content").load("/dataAnalysis/static/add-user.html")
+        })
+    }
+
+    // 请求添加界面
+    function addRole() {
+        $("#addRole").click(function () {
+            $("#content").load("/dataAnalysis/static/add-role.html")
+        })
+    }
+
+    function roleManager() {
+        $("#roleManager").click(function () {
+            $("#content").load("/dataAnalysis/static/role-control.html")
         })
     }
 </script>

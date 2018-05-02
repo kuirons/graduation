@@ -111,7 +111,7 @@ Bootstrap Date Range Picker
             <div class="panel-title">
                 ${userName}
                 <ui class="panel-tools">
-                    <li data-toggle="tooltip" title="修改信息">
+                    <li data-toggle="tooltip" title="修改信息" onclick="changeUserInfos(this)">
                         <a class="icon">
                             <i class="fa fa-pencil">
                             </i>
@@ -150,7 +150,6 @@ Bootstrap Date Range Picker
             </div>
         </div>
     </div>
-
 </script>
 <script>
     $(document).ready(function () {
@@ -167,6 +166,26 @@ Bootstrap Date Range Picker
                 async: false,
                 success: function (data) {
                     $.tmpl("userData", data).appendTo("#row")
+                },
+                error: function (data) {
+                    alert(data["status"])
+                }
+            }
+        )
+    }
+
+    // 修改用户信息
+    function changeUserInfos(value) {
+        var changeUserName = $(value).closest('div').text().trim()
+        $.ajax({
+                type: "post",
+                url: "/dataAnalysis/user/saveChangeUserName",
+                data: {"changeusername": changeUserName},
+                async: true,
+                success: function (data) {
+                    $("#content").load("/dataAnalysis/static/change-userinfo.html", function () {
+                        $("#changed-username").append("你正在修改的用户是：" + changeUserName)
+                    })
                 },
                 error: function (data) {
                     alert(data["status"])

@@ -1,6 +1,7 @@
 package com.graduation.logic.db.impl;
 
 import com.graduation.data.bean.RoleBean;
+import com.graduation.data.extrabean.RoleData;
 import com.graduation.logic.db.HbaseManager;
 import com.graduation.util.CommonUtil;
 import org.apache.hadoop.hbase.client.Result;
@@ -15,6 +16,7 @@ import java.util.List;
 public class RoleDBImpl {
   private static final String TABLE_NAME = "graduation_role";
   @Autowired HbaseManager hbaseManager;
+  @Autowired JurisdictionDBImpl jurisdictionDBImpl;
 
   public List<RoleBean> getAllRoleInfos() {
     List<Result> results = hbaseManager.scanAllTable(TABLE_NAME);
@@ -29,5 +31,19 @@ public class RoleDBImpl {
           roleBeans.add(roleBean);
         });
     return roleBeans;
+  }
+
+  public List<RoleData> getRoleData() {
+    List<RoleData> results = new ArrayList<>();
+    List<RoleBean> roleBeans = getAllRoleInfos();
+    roleBeans.forEach(
+        roleBean -> {
+          RoleData result = new RoleData();
+          result.setRoleName(roleBean.getRole());
+          result.setDescription(roleBean.getDescription());
+          result.setJurisdictions(jurisdictionDBImpl.getJurisdicByRoleName(roleBean.getRole()));
+          results.add(result);
+        });
+    return results;
   }
 }

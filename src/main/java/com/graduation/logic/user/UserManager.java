@@ -1,7 +1,7 @@
 package com.graduation.logic.user;
 
-import com.alibaba.fastjson.JSON;
 import com.graduation.data.bean.UserBean;
+import com.graduation.data.bean.UserRoleBean;
 import com.graduation.data.extrabean.UserData;
 import com.graduation.logic.db.impl.UserDBImpl;
 import com.graduation.logic.role.RoleManager;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author WuGYu
@@ -27,7 +28,12 @@ public class UserManager {
     allUser.forEach(
         userBean -> {
           UserData userData = new UserData();
-          List<String> roles = roleManager.getRolesByUserName(userBean.getUserName());
+          List<String> roles =
+              roleManager
+                  .getRolesByUserName(userBean.getUserName())
+                  .stream()
+                  .map(UserRoleBean::getRoleName)
+                  .collect(Collectors.toList());
           userData.setPhone(userBean.getPhone());
           userData.setDescription(userBean.getDescription());
           userData.setRoleInfos(roles);
@@ -46,9 +52,13 @@ public class UserManager {
   }
 
   public boolean addNewUserInfos(
-      String userName, String addPhonenum, String addUserDescription, String[] addRoleInfos,String password) {
-    if ((!userDBImpl.addUserInfos(userName, addPhonenum, addUserDescription,password))
-        || (!roleManager.addUserRoleInfos(addRoleInfos,userName))) return false;
+      String userName,
+      String addPhonenum,
+      String addUserDescription,
+      String[] addRoleInfos,
+      String password) {
+    if ((!userDBImpl.addUserInfos(userName, addPhonenum, addUserDescription, password))
+        || (!roleManager.addUserRoleInfos(addRoleInfos, userName))) return false;
     return true;
   }
 }

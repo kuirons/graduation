@@ -1,7 +1,7 @@
 package com.graduation.module.role;
 
 import com.alibaba.fastjson.JSON;
-import com.graduation.data.bean.RoleBean;
+import com.graduation.data.extrabean.RoleData;
 import com.graduation.logic.db.impl.RoleDBImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ public class RoleController {
   @RequestMapping(value = "/getRoleData", produces = "application/json;charset=UTF-8")
   @ResponseBody
   public String getAllRoleData() {
-    List<RoleBean> roleInfos = roleDBImpl.getAllRoleInfos();
+    List<RoleData> roleInfos = roleDBImpl.getRoleData();
     return JSON.toJSONString(roleInfos);
   }
 }

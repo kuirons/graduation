@@ -20,9 +20,9 @@ public class RoleJurisdicationBean {
     this.permission = msg[1];
   }
 
-  public RoleJurisdicationBean(RoleBean roleBean, JurisdicationBean jurisdicationBean) {
+  public RoleJurisdicationBean(RoleBean roleBean, JurisdictionBean jurisdictionBean) {
     this.roleName = roleBean.getRole();
-    this.permission = jurisdicationBean.getPermission();
+    this.permission = jurisdictionBean.getPermission();
   }
 
   public String getPermission() {
