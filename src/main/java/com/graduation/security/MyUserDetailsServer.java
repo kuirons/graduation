@@ -29,7 +29,7 @@ public class MyUserDetailsServer implements UserDetailsService {
     List<String> roleNames = new ArrayList<>();
     urs.forEach(userRoleBean -> roleNames.add(userRoleBean.getRoleName()));
     // 获取权限集合
-    List<Jurisdiction> jurisdictions = roleJurisdicationDB.getPermissionByRoleName(roleNames);
+    List<Jurisdiction> jurisdictions = roleJurisdicationDB.getPermissionByRoleNames(roleNames);
     List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
     // 组装成权限列表
     jurisdictions.forEach(

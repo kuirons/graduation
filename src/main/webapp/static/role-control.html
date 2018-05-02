@@ -41,7 +41,7 @@
 <div class="container-padding">
     <!-- Start Row -->
     <!--这里初步规划1行3个，大概差不多吧-->
-    <div class="row">
+    <div class="row" id="role-row">
     </div>
     <!--这是为了留白，不至于太难看-->
     <br>
@@ -115,13 +115,13 @@ Bootstrap Date Range Picker
 ================================================ -->
 <script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
 <!--这里定义一个模板-->
-<script id='role-date' type='text/html'>
+<script id='role-data' type='text/html'>
     <div class="col-sm-4 col-md-4">
         <div class="panel panel-default">
             <div class="panel-title">
-                ${role}
+                ${roleName}
                 <ui class="panel-tools">
-                    <li data-toggle="tooltip" title="修改信息">
+                    <li data-toggle="tooltip" title="修改信息" onclick="changeRoleInfos(this)">
                         <a class="icon">
                             <i class="fa fa-pencil">
                             </i>
@@ -142,13 +142,13 @@ Bootstrap Date Range Picker
                 </p>
                 <ui class="basic-list">
                     <li>
-                        角色名：${role}
+                        角色名：${roleName}
                     </li>
                     <li>
                         角色权限：&nbsp;
-                        ${{each(i,aaa) aaas}}
-                        <a href="#" class="btn btn-rounded btn-default btn-sm">${aaa}</a>
-                        ${{/each}}
+                        {{each(i,jurisdiction) jurisdictions}}
+                        <a href="#" class="btn btn-rounded btn-default btn-sm">${jurisdiction}</a>
+                        {{/each}}
                     </li>
                     <li>
                         描述：${description}
@@ -164,14 +164,34 @@ Bootstrap Date Range Picker
     })
     // 加载该页面的时候从后台获取相关数据信息
     function getRoleData() {
-        // var userDataTmpl = $('#user-date').html()
-        // $.template("userData", userDataTmpl)
+        var roleDataTmpl = $('#role-data').html()
+        $.template("roleData", roleDataTmpl)
         $.ajax({
                 type: "post",
-                url: "/dataAnalysis/role/getRoleData",
+                url: "/dataAnalysis/role/getAllRoleData",
                 async: false,
                 success: function (data) {
-                    // $.tmpl("userData", data).appendTo("#row")
+                    $.tmpl("roleData", data).appendTo("#role-row")
+                },
+                error: function (data) {
+                    alert(data["status"])
+                }
+            }
+        )
+    }
+
+    // 修改角色信息
+    function changeRoleInfos(value) {
+        var changeRoleName = $(value).closest('div').text().trim()
+        $.ajax({
+                type: "post",
+                url: "/dataAnalysis/role/saveChangeRoleName",
+                data: {"changerolename": changeRoleName},
+                async: true,
+                success: function (data) {
+                    $("#content").load("/dataAnalysis/static/change-roleinfo.html", function () {
+                        $("#changed-rolename").append("你正在修改的角色是：" + changeRoleName)
+                    })
                 },
                 error: function (data) {
                     alert(data["status"])

@@ -8,122 +8,95 @@
     <link href="css/root.css" rel="stylesheet">
 </head>
 <body>
-<!-- START CONTENT -->
-<div class="content">
+<!-- Start Page Header -->
+<div class="page-header">
+    <h1 class="title">修改角色信息</h1>
+    <ol class="breadcrumb">
+        <li><a href="index.html">主页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">修改角色信息</li>
+    </ol>
+</div>
+<!-- End Page Header -->
 
-    <!-- Start Page Header -->
-    <div class="page-header">
-        <h1 class="title">修改角色信息</h1>
-        <ol class="breadcrumb">
-            <li><a href="index.html">主页</a></li>
-            <li><a href="#">系统管理</a></li>
-            <li class="active">修改角色信息</li>
-        </ol>
-    </div>
-    <!-- End Page Header -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START CONTAINER -->
+<!--要在这里添加信息-->
+<div class="container-padding">
+    <!-- Start Row -->
+    <div class="row">
+        <!--<div class="panel panel-default">-->
+        <div class="panel panel-default">
 
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
-    <!-- START CONTAINER -->
-    <!--要在这里添加信息-->
-    <div class="container-padding">
-        <!-- Start Row -->
-        <div class="row">
-            <!--<div class="panel panel-default">-->
-            <div class="panel panel-default">
+            <div class="panel-title" id="changed-rolename">
+            </div>
 
-                <div class="panel-title">
-                    被修改的角色的名字
-                </div>
-
-                <div class="panel-body">
-                    <form>
-                        <div class="form-group">
-                            <label class="form-label">备注</label>
-                            <textarea class="form-control form-control-line" rows="5"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <p>权限</p>
-                            <div class="checkbox checkbox-primary checkbox-inline">
-                                <input id="checkbox101" type="checkbox" value="1">
-                                <label for="checkbox101">
-                                    日日日
-                                </label>
-                            </div>
-                            <div class="checkbox checkbox-primary checkbox-inline">
-                                <input id="checkbox102" type="checkbox" value="2">
-                                <label for="checkbox102">
-                                    啊啊啊啊
-                                </label>
-                            </div>
-                            <div class="checkbox checkbox-primary checkbox-inline">
-                                <input id="checkbox103" type="checkbox" value="3">
-                                <label for="checkbox103">
-                                    阿斯蒂芬
-                                </label>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-default">保存修改</button>
-                    </form>
-
-                </div>
+            <div class="panel-body">
+                <form id="new-roleinfos">
+                    <div class="form-group">
+                        <label class="form-label" id="newroledescription">备注</label>
+                        <textarea class="form-control form-control-line" rows="5"></textarea>
+                    </div>
+                    <div class="form-group" id="change-role-permission-infos">
+                        <p>权限</p>
+                    </div>
+                    <button type="button" class="btn btn-default" id="change-roleinfo-save">保存修改</button>
+                </form>
 
             </div>
-            <!--</div>-->
+
         </div>
-        <!--这是为了留白，不至于太难看-->
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <!-- End Row -->
+        <!--</div>-->
     </div>
-    <!-- END CONTAINER -->
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
-
-
-    <!-- Start Footer -->
-    <div class="row footer">
-        <div class="col-md-6 text-right">
-            Graduation
-        </div>
-    </div>
-    <!-- End Footer -->
-
-
+    <!--这是为了留白，不至于太难看-->
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <!-- End Row -->
 </div>
-<!-- End Content -->
+<!-- END CONTAINER -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
 
+
+<!-- Start Footer -->
+<div class="row footer">
+    <div class="col-md-6 text-right">
+        Graduation
+    </div>
+</div>
+<!-- End Footer -->
 <!-- ================================================
 jQuery Library
 ================================================ -->
@@ -158,5 +131,48 @@ Moment.js
 Bootstrap Date Range Picker
 ================================================ -->
 <script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        getAllPermission()
+    })
+
+    // 这里请求现有的角色信息
+    function getAllPermission() {
+        $.ajax({
+            type: "post",
+            url: "/dataAnalysis/jurisdiction/getAllPermission",
+            datatype: "json",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#change-role-permission-infos").append('<div class="checkbox checkbox-primary checkbox-inline">\n' +
+                        '                            <input id="changePermission' + i + '" type="checkbox" value="' + data[i]["role"] + '" name="changePermissionInfos[]">\n' +
+                        '                            <label for="changePermission' + i + '">\n' + data[i]["permission"] +
+                        '                                \n' +
+                        '                            </label>\n' +
+                        '                        </div>')
+                }
+            }
+        })
+    }
+</script>
+<script>
+    // 提交修改信息
+    $("#change-roleinfo-save").click(function () {
+        $.ajax({
+            type: "post",
+            data: $("#new-roleinfos").serialize(),
+            url: "/dataAnalysis/role/changeRoleInfos",
+            datatype: "json",
+            async: false,
+            success: function () {
+                $("#content").load("/dataAnalysis/static/role-control.html")
+            },
+            error: function () {
+                alert("修改信息失败，请联系管理员")
+                $("#content").load("/dataAnalysis/static/role-control.html")
+            }
+        })
+    })
+</script>
 </body>
 </html>
