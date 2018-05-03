@@ -3,7 +3,6 @@ package com.graduation.logic.db.impl;
 import com.graduation.data.bean.RoleJurisdicationBean;
 import com.graduation.logic.db.HbaseManager;
 import com.graduation.security.Jurisdiction;
-import org.apache.avro.generic.GenericData;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +44,29 @@ public class RoleJurisdicationDBImpl {
           jurisdictions.add(permission);
         });
     return jurisdictions;
+  }
+
+  public List<RoleJurisdicationBean> getAllRoleJurisdictionsByUserName(String roleName) {
+    List<RoleJurisdicationBean> roleJurisdicationBeans = new ArrayList<>();
+    PrefixFilter filter = new PrefixFilter(roleName.getBytes());
+    ResultScanner results = hbaseManager.getScan(TABLENAME, null, filter);
+    results.forEach(
+        result -> {
+          RoleJurisdicationBean bean = new RoleJurisdicationBean(new String(result.getRow()));
+          roleJurisdicationBeans.add(bean);
+        });
+    return roleJurisdicationBeans;
+  }
+
+  public boolean updataRoleJurisdictions(String changeRoleName, String[] changePermissionInfos) {
+    // 还是先删再添加
+    boolean result = deletePermissionByUsername(changeRoleName);
+    return false;
+  }
+
+  private boolean deletePermissionByUsername(String changeRoleName) {
+    if (changeRoleName == null) return false;
+    //        getAllRoleJurisdictionsByUserName()
+    return false;
   }
 }

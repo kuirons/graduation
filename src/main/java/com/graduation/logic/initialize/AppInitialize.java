@@ -67,7 +67,7 @@ public class AppInitialize implements InitializingBean {
         break;
       case "graduation_jurisdiction":
         msg = "权限";
-        put = new Put("admin".getBytes());
+        put = new Put("g_admin".getBytes());
         put.addColumn("jurisdictioninfo".getBytes(), "description".getBytes(), "超级用户权限".getBytes());
         families = new String[] {"jurisdictioninfo"};
         break;

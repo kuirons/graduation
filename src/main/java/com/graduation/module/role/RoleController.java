@@ -59,14 +59,14 @@ public class RoleController {
   // todo 如果为空则表示不更改,这里其实有问题，需要上锁
   @RequestMapping(value = "/changeRoleInfos", produces = "application/json;charset=UTF-8")
   @ResponseBody
-  public void changeUserInfos(
+  public void changeRoleInfos(
       @RequestParam(value = "changePermissionInfos[]", required = false)
           String[] changePermissionInfos,
       @RequestParam(value = "newroledescription", required = false) String newRoleDescription,
       HttpServletResponse response,
       HttpServletRequest request)
       throws IOException {
-    if (!roleManager.changeUserInfos(
+    if (!roleManager.changeRoleInfos(
         newRoleDescription,
         changePermissionInfos,
         (String) request.getSession().getAttribute("changeRoleName"))) response.setStatus(500);

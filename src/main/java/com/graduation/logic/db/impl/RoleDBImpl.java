@@ -5,6 +5,8 @@ import com.graduation.data.extrabean.RoleData;
 import com.graduation.logic.db.HbaseManager;
 import com.graduation.security.Jurisdiction;
 import com.graduation.util.CommonUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -52,5 +54,14 @@ public class RoleDBImpl {
           results.add(result);
         });
     return results;
+  }
+
+  public boolean updateRoleInfos(String changeRoleName, String newRoleDescription) {
+    if (StringUtils.isBlank(changeRoleName) || StringUtils.isBlank(newRoleDescription))
+      return false;
+    Put put = new Put(changeRoleName.getBytes());
+    put.addColumn("roleinfo".getBytes(), "description".getBytes(), newRoleDescription.getBytes());
+    hbaseManager.synPut(TABLE_NAME, put);
+    return true;
   }
 }

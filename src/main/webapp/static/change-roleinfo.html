@@ -34,8 +34,8 @@
             <div class="panel-body">
                 <form id="new-roleinfos">
                     <div class="form-group">
-                        <label class="form-label" id="newroledescription">备注</label>
-                        <textarea class="form-control form-control-line" rows="5"></textarea>
+                        <label class="form-label">备注</label>
+                        <textarea class="form-control form-control-line" rows="5" id="newroledescription" name="newroledescription"></textarea>
                     </div>
                     <div class="form-group" id="change-role-permission-infos">
                         <p>权限</p>
@@ -145,7 +145,7 @@ Bootstrap Date Range Picker
             success: function (data) {
                 for (var i = 0; i < data.length; i++) {
                     $("#change-role-permission-infos").append('<div class="checkbox checkbox-primary checkbox-inline">\n' +
-                        '                            <input id="changePermission' + i + '" type="checkbox" value="' + data[i]["role"] + '" name="changePermissionInfos[]">\n' +
+                        '                            <input id="changePermission' + i + '" type="checkbox" value="' + data[i]["permission"] + '" name="changePermissionInfos[]">\n' +
                         '                            <label for="changePermission' + i + '">\n' + data[i]["permission"] +
                         '                                \n' +
                         '                            </label>\n' +
