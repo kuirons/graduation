@@ -3,13 +3,16 @@ package com.graduation.logic.db.impl;
 import com.graduation.data.bean.RoleJurisdicationBean;
 import com.graduation.logic.db.HbaseManager;
 import com.graduation.security.Jurisdiction;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author WuGYu
@@ -60,13 +63,31 @@ public class RoleJurisdicationDBImpl {
 
   public boolean updataRoleJurisdictions(String changeRoleName, String[] changePermissionInfos) {
     // 还是先删再添加
-    boolean result = deletePermissionByUsername(changeRoleName);
-    return false;
+    boolean deleteResult = deletePermissionByUsername(changeRoleName);
+    if (!deleteResult) return false;
+    addRoleJurisdiction(changePermissionInfos, changeRoleName);
+    return true;
+  }
+
+  private boolean addRoleJurisdiction(String[] changePermissionInfos, String changeRoleName) {
+    Arrays.stream(changePermissionInfos)
+        .map(s -> new RoleJurisdicationBean(changeRoleName, s).toString())
+        .forEach(
+            s -> {
+              Put put = new Put(s.getBytes());
+              // 纯粹就是用来占位置得
+              put.addColumn("info".getBytes(), "description".getBytes(), "aa".getBytes());
+              hbaseManager.synPut(TABLENAME, put);
+            });
+    return true;
   }
 
   private boolean deletePermissionByUsername(String changeRoleName) {
     if (changeRoleName == null) return false;
-    //        getAllRoleJurisdictionsByUserName()
-    return false;
+    List<RoleJurisdicationBean> beans = getAllRoleJurisdictionsByUserName(changeRoleName);
+    List<String> rows =
+        beans.stream().map(RoleJurisdicationBean::toString).collect(Collectors.toList());
+    hbaseManager.delete(TABLENAME, (String[]) rows.toArray());
+    return true;
   }
 }

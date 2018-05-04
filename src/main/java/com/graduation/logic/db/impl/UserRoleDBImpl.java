@@ -39,10 +39,10 @@ public class UserRoleDBImpl {
   public boolean updateUserRoleInfos(String[] changeRoleInfos, String username) {
     // 如果changeRoleInfos为空，表示没有选择任何权限
     deleteByUsername(username);
-    return addUserInfos(changeRoleInfos, username);
+    return addUserRoleInfos(changeRoleInfos, username);
   }
 
-  public boolean addUserInfos(String[] changeRoleInfos, String username) {
+  public boolean addUserRoleInfos(String[] changeRoleInfos, String username) {
     if (!(changeRoleInfos == null || changeRoleInfos.length <= 0)) {
       Arrays.stream(changeRoleInfos)
           .map(s -> new UserRoleBean(username, s).toString())

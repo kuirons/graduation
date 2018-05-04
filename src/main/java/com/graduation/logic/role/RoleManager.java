@@ -28,7 +28,7 @@ public class RoleManager {
   }
 
   public boolean addUserRoleInfos(String[] addRoleInfos, String username) {
-    return userRoleDBImpl.addUserInfos(addRoleInfos, username);
+    return userRoleDBImpl.addUserRoleInfos(addRoleInfos, username);
   }
 
   public List<RoleData> getRoleData() {
