@@ -25,9 +25,9 @@
         <!--<i class="fa fa-search"></i>-->
         <!--</a>-->
         <!--</div>-->
-        <form class="searchform right">
-            <input type="text" id="searchbox" placeholder="角色名">
-            <span class="searchbutton"><i class="fa fa-search"></i></span>
+        <form class="searchform right" id="roleSearch">
+            <input type="text" id="role-search-name" name="role-search-name" placeholder="角色名">
+            <button type="button" class="searchbutton" id="roleSearchBuntton"><i class="fa fa-search"></i></button>
         </form>
     </div>
     <!-- End Page Header Right Div -->
@@ -43,38 +43,34 @@
     <!--这里初步规划1行3个，大概差不多吧-->
     <div class="row" id="role-row">
     </div>
-    <!--这是为了留白，不至于太难看-->
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
     <!-- End Row -->
 </div>
+<!--这是为了留白，不至于太难看-->
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <!-- END CONTAINER -->
 <!-- //////////////////////////////////////////////////////////////////////////// -->
 
 
 <!-- Start Footer -->
 <div class="row footer">
-    <div class="col-md-6 text-left">
-        Copyright © 2015 <a href="http://themeforest.net/user/egemem/portfolio" target="_blank">Egemem</a> All
-        rights reserved.
-    </div>
     <div class="col-md-6 text-right">
-        Design and Developed by <a href="http://themeforest.net/user/egemem/portfolio" target="_blank">Egemem</a>
+        Graduation
     </div>
 </div>
 <!-- End Footer -->
@@ -127,7 +123,7 @@ Bootstrap Date Range Picker
                             </i>
                         </a>
                     </li>
-                    <li data-toggle="tooltip" title="删&nbsp;除">
+                    <li data-toggle="tooltip" title="删&nbsp;除" onclick="deleteRoleInfos(this)">
                         <a class="icon">
                             <i class="fa fa-trash">
                             </i>
@@ -162,6 +158,7 @@ Bootstrap Date Range Picker
     $(document).ready(function () {
         getRoleData()
     })
+
     // 加载该页面的时候从后台获取相关数据信息
     function getRoleData() {
         var roleDataTmpl = $('#role-data').html()
@@ -199,6 +196,45 @@ Bootstrap Date Range Picker
             }
         )
     }
+
+    function deleteRoleInfos(value) {
+        var deleteRoleName = $(value).closest('div').text().trim()
+        $.ajax({
+                type: "post",
+                url: "/dataAnalysis/role/deleteRole",
+                data: {"deleteRoleName": deleteRoleName},
+                async: true,
+                success: function (data) {
+                    $("#content").load("/dataAnalysis/static/role-control.html")
+                },
+                error: function (data) {
+                    alert(data["status"])
+                }
+            }
+        )
+    }
+
+    $("#roleSearchBuntton").click(function () {
+        $.ajax({
+            type: "post",
+            data: $("#roleSearch").serialize(),
+            url: "/dataAnalysis/role/search",
+            datatype: "json",
+            async: false,
+            success: function (data) {
+                if (data["status"] === "fail") {
+                    alert("查无此人")
+                } else {
+                    // 先清空
+                    $("#role-row").empty()
+                    $.tmpl("roleData", data).appendTo("#role-row")
+                }
+            },
+            error: function () {
+                alert(data["status"])
+            }
+        })
+    })
 </script>
 </body>
 </html>

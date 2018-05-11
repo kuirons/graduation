@@ -10,6 +10,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
+
 /** Created by kuirons on 18-4-6 */
 @Service
 public class AppInitialize implements InitializingBean {
@@ -17,6 +19,7 @@ public class AppInitialize implements InitializingBean {
 
   @Autowired HbaseManager hbaseManager;
 
+  // todo 表关系维护，同时使删除更为平滑
   // 这里主要保证程序运行需要的基本表存在
   @Override
   public void afterPropertiesSet() throws Exception {
@@ -37,6 +40,10 @@ public class AppInitialize implements InitializingBean {
     LOGGER.info("开始检查角色-权限表");
     checkTable("graduation_role_jurisdiction");
     LOGGER.info("角色-权限表OK！");
+    checkTable("graduation_data");
+    LOGGER.info("通用数据表OK！");
+    checkTable("graduation_data_all");
+    LOGGER.info("数据表OK！");
   }
 
   // 表的关系自己维护
@@ -62,7 +69,6 @@ public class AppInitialize implements InitializingBean {
             "roleinfo".getBytes(),
             "description".getBytes(),
             "这是超级角色，可以为所欲为，你应该把所有的权限都给他，或者，把最高的权限给他".getBytes());
-        put.addColumn("roleinfo".getBytes(), "rolename".getBytes(), "管理员".getBytes());
         families = new String[] {"roleinfo"};
         break;
       case "graduation_jurisdiction":
@@ -85,6 +91,16 @@ public class AppInitialize implements InitializingBean {
         put.addColumn("info".getBytes(), "description".getBytes(), "aa".getBytes());
         families = new String[] {"info"};
         break;
+      case "graduation_data_all":
+        msg = "详细数据表";
+        put = null;
+        families = new String[] {"datainfo"};
+        break;
+      case "graduation_data":
+        msg = "通用数据表";
+        put = null;
+        families = new String[] {"datainfo"};
+        break;
       default:
         return;
     }
@@ -96,12 +112,13 @@ public class AppInitialize implements InitializingBean {
     }
   }
 
-  private void checkTable(String tableName, String msg, String[] families, Put put)
+  private void checkTable(
+      String tableName, String msg, @Nullable String[] families, @Nullable Put put)
       throws Exception {
     if (!hbaseManager.existTable(tableName)) {
       LOGGER.info(msg + "表不存在，开始创建");
       hbaseManager.createTable(tableName, families);
-      hbaseManager.synPut(tableName, put);
+      if (put != null) hbaseManager.synPut(tableName, put);
       LOGGER.info(msg + "表创建完毕");
     }
   }

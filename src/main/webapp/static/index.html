@@ -65,6 +65,14 @@
     <ul class="sidebar-panel nav" id="main-panel">
         <li class="sidetitle">MAIN</li>
         <li><a href="index.html"><span class="icon color5"><i class="fa fa-home"></i></span>首页</a></li>
+        <li id="datamanager"><a href="javascript:void(0)"><span class="icon color7"><i
+                class="fa fa-database"></i></span>数据管理<span
+                class="caret"></span></a>
+            <ul>
+                <li><a href="javascript:void(0)" id="addData">导入数据</a></li>
+                <li><a href="javascript:void(0)" id="showData">查看数据</a></li>
+            </ul>
+        </li>
         <!--todo 这部分需要确定是否具有相关权限，才能显示-->
         <li id="systemcontrol"><a href="javascript:void(0)"><span class="icon color7"><i
                 class="fa fa-shield"></i></span>系统管理<span
@@ -74,6 +82,14 @@
                 <li><a href="javascript:void(0)" id="userManager">用户管理</a></li>
                 <li><a href="javascript:void(0)" id="addRole">添加角色</a></li>
                 <li><a href="javascript:void(0)" id="roleManager">角色管理</a></li>
+            </ul>
+        </li>
+        <li id="logmanager"><a href="javascript:void(0)"><span class="icon color7"><i
+                class="fa fa-file-text"></i></span>日志管理<span
+                class="caret"></span></a>
+            <ul>
+                <li><a href="javascript:void(0)" id="systemLog">系统日志</a></li>
+                <li><a href="javascript:void(0)" id="operationLog">操作日志</a></li>
             </ul>
         </li>
         <br>
@@ -266,6 +282,8 @@ Below codes are only for index widgets
         addUser()
         roleManager()
         addRole()
+        dataManager()
+        showData()
     })
 
     // 决定是否加载系统管理标签
@@ -313,6 +331,18 @@ Below codes are only for index widgets
     function roleManager() {
         $("#roleManager").click(function () {
             $("#content").load("/dataAnalysis/static/role-control.html")
+        })
+    }
+
+    function dataManager() {
+        $("#addData").click(function () {
+            $("#content").load("/dataAnalysis/static/data-import.html")
+        })
+    }
+
+    function showData() {
+        $("#showData").click(function () {
+            $("#content").load("/dataAnalysis/static/data-control.html")
         })
     }
 </script>

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DataShow</title>
+
+    <!-- ========== Css Files ========== -->
+    <link href="css/root.css" rel="stylesheet">
+</head>
+<body>
+<!-- Start Page Header -->
+<div class="page-header">
+    <h1 class="title">查看数据</h1>
+    <ol class="breadcrumb">
+        <li><a href="index.html">主页</a></li>
+        <li><a href="#">数据管理</a></li>
+        <li class="active">查看数据</li>
+    </ol>
+</div>
+<!-- End Page Header -->
+
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START CONTAINER -->
+<!--要在这里添加信息-->
+<div class="row">
+    <div class="col-sm-4 col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-title" id="show-filename1">
+                <ul class="panel-tools">
+                    <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
+                    <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a></li>
+                    <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <ui class="basic-list">
+                    <li id="show-filename2">
+                        文件名：
+                    </li>
+                    <li id="show-username">
+                        上传人：
+                    </li>
+                    <li id="show-time">
+                        上传时间：
+                    </li>
+                    <li id="show-description">
+                        描述：
+                    </li>
+                    <li id="show-maxnum">
+                        最大值X/Y：
+                    </li>
+                    <li id="show-minnum">
+                        最小值X/Y：
+                    </li>
+                    <li id="show-average">
+                        平均值X/Y：
+                    </li>
+                    <li id="show-variance">
+                        方差X/Y：
+                    </li>
+                </ui>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-widget">
+            <div class="panel-title">
+                Inbox <span class="label label-danger">9</span>
+                <ul class="panel-tools">
+                    <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
+                    <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a></li>
+                    <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <ul class="mailbox-inbox">
+                    <li>
+                        <a href="#" class="item clearfix">
+                            <img src="img/profileimg.png" alt="img" class="img">
+                            <span class="from">Jonathan Doe</span>
+                            Hello, m8 how is goin ?
+                            <span class="date">22 May</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item clearfix">
+                            <img src="img/profileimg2.png" alt="img" class="img">
+                            <span class="from">Egemem Ka</span>
+                            Problems look mighty small...
+                            <span class="date">22 May</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item clearfix">
+                            <img src="img/profileimg3.png" alt="img" class="img">
+                            <span class="from">James Throwing</span>
+                            New job offer ?
+                            <span class="date">22 May</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item clearfix">
+                            <img src="img/profileimg4.png" alt="img" class="img">
+                            <span class="from">Timmy Jefsin</span>
+                            Tonight Party
+                            <span class="date">22 May</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body table-responsive pre-scrollable">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>所属子孔镜</td>
+                        <td>帧序号</td>
+                        <td>X偏移量</td>
+                        <td>Y偏移量</td>
+                    </tr>
+                    </thead>
+                    <tbody id="detail-data-infos">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-title">
+                多项式回归
+                <ul class="panel-tools">
+                    <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
+                    <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a>
+                    </li>
+                    <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body" id="polynomial" style="width: 100%;height:600px;">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-title">
+                折线图
+                <ul class="panel-tools">
+                    <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
+                    <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a>
+                    </li>
+                    <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body" id="discount" style="width: 100%;height:600px;">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-title">
+                散点图
+                <ul class="panel-tools">
+                    <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
+                    <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a>
+                    </li>
+                    <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body" id="scatter" style="width: 100%;height:600px;">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-title">
+                3d
+                <ul class="panel-tools">
+                    <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
+                    <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a>
+                    </li>
+                    <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <div id="td" style="width: 100%;height:600px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Start Footer -->
+<div class="row footer">
+    <div class="col-md-6 text-right">
+        Graduation
+    </div>
+</div>
+<!-- End Footer -->
+
+<!-- ================================================
+jQuery Library
+================================================ -->
+<script type="text/javascript" src="js/jquery.min.js"></script>
+
+<script type="text/javascript" src="js/ecStat.min.js"></script>
+
+<script type="text/javascript" src="js/echarts.js"></script>
+<script type="text/javascript" src="js/echarts-gl.min.js"></script>
+
+<!-- ================================================
+Bootstrap Core JavaScript File
+================================================ -->
+<script src="js/bootstrap/bootstrap.min.js"></script>
+
+<!-- ================================================
+Plugin.js - Some Specific JS codes for Plugin Settings
+================================================ -->
+<script type="text/javascript" src="js/plugins.js"></script>
+
+<!-- ================================================
+Bootstrap Select
+================================================ -->
+<script type="text/javascript" src="js/bootstrap-select/bootstrap-select.js"></script>
+
+<!-- ================================================
+Bootstrap Toggle
+================================================ -->
+<script type="text/javascript" src="js/bootstrap-toggle/bootstrap-toggle.min.js"></script>
+
+<!-- ================================================
+Moment.js
+================================================ -->
+<script type="text/javascript" src="js/moment/moment.min.js"></script>
+
+<!-- ================================================
+Bootstrap Date Range Picker
+================================================ -->
+<script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
+
+<script id='user-date' type='text/html'>
+    <tr>
+        <td>965</td>
+        <td>Kode Dashboard Template</td>
+        <td><span class="label label-default">Developing</span></td>
+        <td class="text-right"><span class="demo-project-stats"></span></td>
+    </tr>
+</script>
+
+<script type="text/javascript">
+    // 采样频率统一为100HZ
+    var baseData;
+    $(document).ready(function () {
+        // 后端过来的数据需要进行重新组合，一适合图表的格式
+        getData();
+        formatDataPolynomial()
+        formatDataDiscount()
+        formatTdData()
+        formatScatterData()
+        simpleData()
+    })
+
+    function getData() {
+        $.ajax({
+                type: "post",
+                url: "/dataAnalysis/data/getSingleData",
+                async: false,
+                success: function (data) {
+                    baseData = data
+                    for (var i = 0; i < data.length; i++) {
+                        var x = JSON.parse(data[i]["jsonX"])
+                        var y = JSON.parse(data[i]["jsonY"])
+                        var sub = i + 1
+                        for (var j = 0; j < 5; j++) {
+                            var fps = j + 1
+                            $("#detail-data-infos").append('<tr>\n' +
+                                '        <td>' + sub + '</td>\n' +
+                                '        <td>' + fps + '</td>\n' +
+                                '        <td>' + x[j] + '</td>\n' +
+                                '        <td >' + y[j] + '</td>\n' +
+                                '    </tr>')
+                        }
+                    }
+                },
+                error: function (data) {
+                    alert(data["status"])
+                }
+            }
+        )
+    }
+
+    // 多元回归
+    function formatDataPolynomial() {
+        var data = baseData;
+        var dataX = JSON.parse(data[0]["jsonX"])
+        var dataY = JSON.parse(data[0]["jsonY"])
+        var a = new Array()
+        var j = 0;
+        for (var i = 0; i < dataX.length / 100; i++) {
+            a[i] = new Array();
+            a[i][0] = dataX[j]
+            a[i][1] = dataY[j]
+            j = j + 100
+        }
+        polynomial(a)
+    }
+
+    function polynomial(data) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('polynomial'));
+
+        var myRegression = ecStat.regression('polynomial', data, 50);
+
+        myRegression.points.sort(function (a, b) {
+            return a[0] - b[0];
+        });
+
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'
+                }
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            legend: {
+                data: ['scatter']
+            },
+            xAxis: {
+                type: 'value',
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed'
+                    }
+                },
+                splitNumber: 20
+            },
+            yAxis: {
+                type: 'value',
+                min: -1,
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed'
+                    }
+                }
+            },
+            grid: {
+                top: 90
+            },
+            series: [{
+                name: 'scatter',
+                type: 'scatter',
+                label: {
+                    emphasis: {
+                        show: true,
+                        position: 'right',
+                        textStyle: {
+                            color: 'blue',
+                            fontSize: 16
+                        }
+                    }
+                },
+                data: data
+            }, {
+                name: 'line',
+                type: 'line',
+                smooth: true,
+                showSymbol: false,
+                data: myRegression.points,
+                markPoint: {
+                    itemStyle: {
+                        normal: {
+                            color: 'transparent'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'left',
+                            formatter: myRegression.expression,
+                            textStyle: {
+                                color: '#333',
+                                fontSize: 14
+                            }
+                        }
+                    },
+                    data: [{
+                        coord: myRegression.points[myRegression.points.length - 1]
+                    }]
+                }
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+    // 折线
+    function formatDataDiscount() {
+        var data = baseData;
+        var dataX = JSON.parse(data[0]["jsonX"])
+        var dataY = JSON.parse(data[0]["jsonY"])
+        var xx = new Array()
+        var ax = new Array()
+        var ay = new Array()
+        var j = 0
+        for (var i = 0; i < dataX.length / 100; i++) {
+            xx[i] = 0.04096 * i
+            ax[i] = dataX[j]
+            ay[i] = dataY[j]
+            j = j + 100
+        }
+        discount(ax, ay, xx)
+    }
+
+    function discount(ax, ay, xx) {
+        var myChart = echarts.init(document.getElementById('discount'));
+        option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['x位移', 'y位移']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: xx
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: 'x位移',
+                    type: 'line',
+                    data: ax
+                },
+                {
+                    name: 'y位移',
+                    type: 'line',
+                    data: ay
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+    function formatTdData() {
+        var data = baseData;
+        var dataX = JSON.parse(data[0]["jsonX"])
+        var dataY = JSON.parse(data[0]["jsonY"])
+        var aa = new Array()
+        var j = 0
+        for (var i = 0; i < dataX.length / 10; i++) {
+            aa[i] = new Array()
+            aa[i][0] = dataX[j]
+            aa[i][1] = dataY[j]
+            aa[i][2] = 0.004096 * i
+            j = j + 10
+        }
+        tD(aa)
+    }
+
+    // 3d
+    function tD(data) {
+        var myChart = echarts.init(document.getElementById('td'));
+        option = {
+            grid3D: {},
+            xAxis3D: {},
+            yAxis3D: {},
+            zAxis3D: {},
+            series: [
+                {
+                    type: 'scatter3D',
+                    data: data
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+    function formatScatterData() {
+        var data = baseData;
+        var dataX = JSON.parse(data[0]["jsonX"])
+        var dataY = JSON.parse(data[0]["jsonY"])
+        var a = new Array()
+        for (var i = 0; i < dataX.length; i++) {
+            a[i] = new Array();
+            a[i][0] = dataX[i]
+            a[i][1] = dataY[i]
+        }
+        scatter(a)
+    }
+
+    // 散点
+    function scatter(data) {
+        var myChart = echarts.init(document.getElementById('scatter'));
+        var option = {
+            visualMap: {
+                min: -0.6,
+                max: 0.6,
+                dimension: 1,
+                orient: 'vertical',
+                right: 10,
+                top: 'center',
+                text: ['HIGH', 'LOW'],
+                calculable: true,
+                inRange: {
+                    color: ['#f2c31a', '#24b7f2']
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                axisPointer: {
+                    type: 'cross'
+                }
+            },
+            xAxis: [{
+                type: 'value'
+            }],
+            yAxis: [{
+                type: 'value'
+            }],
+            series: [{
+                name: 'price-area',
+                type: 'scatter',
+                symbolSize: 5,
+                data: data
+            }]
+        };
+        myChart.setOption(option);
+    }
+
+    function simpleData() {
+        $.ajax({
+                type: "post",
+                url: "/dataAnalysis/data/getDataByFileName",
+                async: false,
+                success: function (data) {
+                    $("#show-filename1").append(data["fileName"])
+                    $("#show-filename2").append(data["fileName"])
+                    $("#show-username").append(data["userName"])
+                    $("#show-time").append(formatDate(data["time"]))
+                    $("#show-description").append(data["description"])
+                    var otherInfosX = JSON.parse(data["jsonStatisticsX"])
+                    var otherInfosY = JSON.parse(data["jsonStatisticsY"])
+                    $("#show-maxnum").append(otherInfosX[0] + "/" + otherInfosY[0])
+                    $("#show-minnum").append(otherInfosX[1] + "/" + otherInfosY[1])
+                    $("#show-average").append(otherInfosX[2] + "/" + otherInfosY[2])
+                    $("#show-variance").append(otherInfosX[3] + "/" + otherInfosY[3])
+                },
+                error: function (data) {
+                    alert(data["status"])
+                }
+            }
+        )
+    }
+
+    function formatDate(time) {
+        var date = new Date()
+        date.setTime(time)
+        return date.toLocaleString()
+    }
+</script>
+</body>
+</html>

@@ -75,4 +75,8 @@ public class UserDBImpl {
     hbaseManager.synPut(TABLENAME, put);
     return true;
   }
+
+  public void deleteUserinfo(String deleteUsername) {
+    hbaseManager.delete(TABLENAME, deleteUsername);
+  }
 }

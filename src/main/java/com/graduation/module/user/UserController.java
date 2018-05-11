@@ -94,4 +94,16 @@ public class UserController {
     out.flush();
     out.close();
   }
+
+  @RequestMapping(value = "/delteUserInfos", produces = "application/json;charset=UTF-8")
+  @ResponseBody
+  public void delteUserInfos(
+      @RequestParam(value = "deleteusername") String deleteUsername, HttpServletResponse response)
+      throws IOException {
+    userManager.deleteUserinfos(deleteUsername);
+    PrintWriter out = response.getWriter();
+    out.write("{\"status\":\"success\"}");
+    out.flush();
+    out.close();
+  }
 }

@@ -57,11 +57,36 @@ public class RoleDBImpl {
   }
 
   public boolean updateRoleInfos(String changeRoleName, String newRoleDescription) {
-    if (StringUtils.isBlank(changeRoleName) || StringUtils.isBlank(newRoleDescription))
-      return false;
-    Put put = new Put(changeRoleName.getBytes());
-    put.addColumn("roleinfo".getBytes(), "description".getBytes(), newRoleDescription.getBytes());
+    return addRoleInfos(newRoleDescription, changeRoleName);
+  }
+
+  public boolean addRoleInfos(String roleDescription, String roleName) {
+    if (StringUtils.isBlank(roleDescription) || StringUtils.isBlank(roleName)) return false;
+    Put put = new Put(roleName.getBytes());
+    put.addColumn("roleinfo".getBytes(), "description".getBytes(), roleDescription.getBytes());
     hbaseManager.synPut(TABLE_NAME, put);
     return true;
+  }
+
+  public void deleteRole(String deleteName) {
+    hbaseManager.delete(TABLE_NAME, deleteName);
+  }
+
+  public RoleData getRoleDataByName(String roleName) {
+    // todo 提供模糊搜索
+    if (StringUtils.isBlank(roleName)) return null;
+    RoleData roleData = new RoleData();
+    Result roleinfo = hbaseManager.getRow(TABLE_NAME, roleName);
+    List<Jurisdiction> permission = roleJurisdicationDB.getPermissionByRoleName(roleName);
+    roleData.setRoleName(roleName);
+    if (roleinfo.isEmpty()) return null;
+    String description =
+        CommonUtil.bytesToString(
+            roleinfo.getValue("roleinfo".getBytes(), "description".getBytes()));
+    if (StringUtils.isBlank(description)) return null;
+    roleData.setDescription(description);
+    roleData.setJurisdictions(
+        permission.stream().map(Jurisdiction::toString).collect(Collectors.toList()));
+    return roleData;
   }
 }

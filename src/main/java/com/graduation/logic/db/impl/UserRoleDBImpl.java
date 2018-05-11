@@ -27,6 +27,7 @@ public class UserRoleDBImpl {
     PrefixFilter filter = new PrefixFilter(userName.getBytes());
     ResultScanner scanner = hbaseManager.getScan(TABLENAME, null, filter);
     scanner.forEach(result -> userRoleBeans.add(new UserRoleBean(new String(result.getRow()))));
+    scanner.close();
     return userRoleBeans;
   }
 

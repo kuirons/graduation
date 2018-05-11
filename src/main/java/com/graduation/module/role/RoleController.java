@@ -3,7 +3,6 @@ package com.graduation.module.role;
 import com.alibaba.fastjson.JSON;
 import com.graduation.data.bean.RoleBean;
 import com.graduation.data.extrabean.RoleData;
-import com.graduation.logic.db.impl.RoleDBImpl;
 import com.graduation.logic.role.RoleManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,5 +76,44 @@ public class RoleController {
       out.flush();
       out.close();
     }
+  }
+
+  @RequestMapping(value = "/addRoleInfos", produces = "application/json;charset=UTF-8")
+  @ResponseBody
+  public void addRoleInfos(
+      @RequestParam(value = "addPermissionInfos[]", required = false) String[] addPermissions,
+      @RequestParam(value = "new-add-role-name", required = false) String roleName,
+      @RequestParam(value = "new-add-role-description", required = false) String roleDescription,
+      HttpServletResponse response)
+      throws IOException {
+    if (!roleManager.addRoleInfos(roleName, roleDescription, addPermissions))
+      response.setStatus(500);
+    else {
+      // 这里直接返回字符串是不行的
+      PrintWriter out = response.getWriter();
+      out.write("{\"status\":\"success\"}");
+      out.flush();
+      out.close();
+    }
+  }
+
+  @RequestMapping(value = "/deleteRole", produces = "application/json;charset=UTF-8")
+  @ResponseBody
+  public void deleteRole(
+      @RequestParam(value = "deleteRoleName") String deleteName, HttpServletResponse response)
+      throws IOException {
+    roleManager.deleteRole(deleteName);
+    PrintWriter out = response.getWriter();
+    out.write("{\"status\":\"success\"}");
+    out.flush();
+    out.close();
+  }
+
+  @RequestMapping(value = "/search", produces = "application/json;charset=UTF-8")
+  @ResponseBody
+  public String search(@RequestParam(value = "role-search-name") String roleName) {
+    RoleData object = roleManager.searchRoleInfos(roleName);
+    if (object == null) return "{\"status\":\"fail\"}";
+    return JSON.toJSONString(object);
   }
 }

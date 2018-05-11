@@ -39,6 +39,8 @@ public class HbaseManager {
     try {
       if (configuration == null) {
         configuration = HBaseConfiguration.create();
+        // 禁用数值检查
+        configuration.set("hbase.client.keyvalue.maxsize", "0");
         try {
           if (connection == null) {
             connection = ConnectionFactory.createConnection();
@@ -404,6 +406,26 @@ public class HbaseManager {
     }
   }
 
+  // 这个函数就很不优雅了。。。。。。
+  public void delete(String tableName, List<String> rows) {
+    Table table = getTable(tableName);
+    if (table != null) {
+      try {
+        List<Delete> deletes = new ArrayList<>();
+        rows.forEach(row -> deletes.add(new Delete(row.getBytes())));
+        if (deletes.size() > 0) table.delete(deletes);
+      } catch (IOException e) {
+        LOGGER.error("批量删除数据失败", e);
+      } finally {
+        try {
+          table.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
   /**
    * 获取单条数据
    *
@@ -485,6 +507,19 @@ public class HbaseManager {
         }
       }
     }
+    return results;
+  }
+
+  public List<Result> getRowsByLimit(
+      String tableName, @Nullable HashMap<String, List<String>> paramHashMap, Filter filter) {
+    List<Result> results = new ArrayList<>();
+    ResultScanner scanner = getScan(tableName, paramHashMap, filter);
+    Iterator<Result> iterator = scanner.iterator();
+    while (iterator.hasNext()) {
+      Result rs = iterator.next();
+      results.add(rs);
+    }
+    scanner.close();
     return results;
   }
 

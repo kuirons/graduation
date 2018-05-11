@@ -33,37 +33,21 @@
             </div>
 
             <div class="panel-body">
-                <form>
+                <form id="add-new-roleinfos">
                     <div class="form-group">
-                        <label for="addusername" class="form-label">角色名</label>
-                        <input type="text" class="form-control form-control-line" id="addusername">
+                        <label for="new-add-role-name" class="form-label">角色名</label>
+                        <input type="text" class="form-control form-control-line" id="new-add-role-name"
+                               name="new-add-role-name">
                     </div>
                     <div class="form-group">
                         <label class="form-label">描述</label>
-                        <textarea class="form-control form-control-line" rows="5"></textarea>
+                        <textarea class="form-control form-control-line" rows="1"
+                                  id="new-add-role-description" name="new-add-role-description"></textarea>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="add-role-permission-infos">
                         <p>权限</p>
-                        <div class="checkbox checkbox-primary checkbox-inline">
-                            <input id="checkbox101" type="checkbox" value="1">
-                            <label for="checkbox101">
-                                登陆
-                            </label>
-                        </div>
-                        <div class="checkbox checkbox-primary checkbox-inline">
-                            <input id="checkbox102" type="checkbox" value="2">
-                            <label for="checkbox102">
-                                操作数据
-                            </label>
-                        </div>
-                        <div class="checkbox checkbox-primary checkbox-inline">
-                            <input id="checkbox103" type="checkbox" value="3">
-                            <label for="checkbox103">
-                                操作其他
-                            </label>
-                        </div>
                     </div>
-                    <button type="submit" class="btn btn-default">添加角色</button>
+                    <button type="button" class="btn btn-default" id="add-roleinfo-save">添加角色</button>
                 </form>
 
             </div>
@@ -155,5 +139,49 @@ Moment.js
 Bootstrap Date Range Picker
 ================================================ -->
 <script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
+
+<script>
+    $(document).ready(function () {
+        getAllPermission()
+    })
+
+    // 这里请求现有的角色信息
+    function getAllPermission() {
+        $.ajax({
+            type: "post",
+            url: "/dataAnalysis/jurisdiction/getAllPermission",
+            datatype: "json",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#add-role-permission-infos").append('<div class="checkbox checkbox-primary checkbox-inline">\n' +
+                        '    <input id="addPermission' + i + '" type="checkbox" value="' + data[i]["permission"] + '" name="addPermissionInfos[]">\n' +
+                        '    <label for="addPermission' + i + '">\n' +
+                        '        ' + data[i]["permission"] + '\n' +
+                        '    </label>\n' +
+                        '</div>')
+                }
+            }
+        })
+    }
+</script>
+<script>
+    // 提交信息
+    $("#add-roleinfo-save").click(function () {
+        $.ajax({
+            type: "post",
+            data: $("#add-new-roleinfos").serialize(),
+            url: "/dataAnalysis/role/addRoleInfos",
+            datatype: "json",
+            async: false,
+            success: function () {
+                $("#content").load("/dataAnalysis/static/role-control.html")
+            },
+            error: function () {
+                alert("添加用户失败，请联系管理员")
+                $("#content").load("/dataAnalysis/static/role-control.html")
+            }
+        })
+    })
+</script>
 </body>
 </html>

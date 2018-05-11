@@ -69,7 +69,7 @@ public class RoleJurisdicationDBImpl {
     return true;
   }
 
-  private boolean addRoleJurisdiction(String[] changePermissionInfos, String changeRoleName) {
+  public boolean addRoleJurisdiction(String[] changePermissionInfos, String changeRoleName) {
     Arrays.stream(changePermissionInfos)
         .map(s -> new RoleJurisdicationBean(changeRoleName, s).toString())
         .forEach(
@@ -82,12 +82,12 @@ public class RoleJurisdicationDBImpl {
     return true;
   }
 
-  private boolean deletePermissionByUsername(String changeRoleName) {
+  public boolean deletePermissionByUsername(String changeRoleName) {
     if (changeRoleName == null) return false;
     List<RoleJurisdicationBean> beans = getAllRoleJurisdictionsByUserName(changeRoleName);
     List<String> rows =
         beans.stream().map(RoleJurisdicationBean::toString).collect(Collectors.toList());
-    hbaseManager.delete(TABLENAME, (String[]) rows.toArray());
+    hbaseManager.delete(TABLENAME, rows);
     return true;
   }
 }

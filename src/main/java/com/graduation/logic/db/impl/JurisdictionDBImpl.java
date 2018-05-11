@@ -1,7 +1,6 @@
 package com.graduation.logic.db.impl;
 
 import com.graduation.data.bean.JurisdictionBean;
-import com.graduation.data.bean.RoleBean;
 import com.graduation.logic.db.HbaseManager;
 import com.graduation.util.CommonUtil;
 import org.apache.hadoop.hbase.client.Result;

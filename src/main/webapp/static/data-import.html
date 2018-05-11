@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<!--
+/*
+ * jQuery File Upload Plugin Basic Plus Demo
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2013, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ */
+-->
+<html lang="en">
+<head>
+    <!-- Force latest IE rendering engine or ChromeFrame if installed -->
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+    <meta charset="utf-8">
+    <title>jQuery File Upload Demo - Basic Plus version</title>
+    <meta name="description"
+          content="File Upload widget with multiple file selection, drag&amp;drop support, progress bar, validation and preview images, audio and video for jQuery. Supports cross-domain, chunked and resumable file uploads. Works with any server-side platform (Google App Engine, PHP, Python, Ruby on Rails, Java, etc.) that supports standard HTML form file uploads.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Generic page styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+    <link rel="stylesheet" href="css/jquery.fileupload.css">
+</head>
+<body>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-title">
+            请输入以下信息:
+        </div>
+        <div class="panel-body">
+            <form id="import-data" name="import-data">
+                <div class="form-group">
+                    <label for="newfilename" class="form-label">文件名</label>
+                    <input type="text" class="form-control form-control-line" id="newfilename" name="newfilename">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">数据描述</label>
+                    <textarea class="form-control form-control-line" rows="3" id="importdata-description"
+                              name="importdata-description"></textarea>
+                </div>
+                <div class="file-container"
+                     style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                    <button class="btn btn-success fileinput-button" type="button">选择文件</button>
+                    <input type="file" id="jobData" onchange="loadFile(this.files[0])" name="files"
+                           style="position:absolute;top:0;left:0;font-size:34px; opacity:0">
+                </div>
+                <span id="filename" style="vertical-align: middle">未上传文件</span>
+                <br>
+                <br>
+                <div>
+                    <button type="button" class="btn btn-default" id="add-data-save">提交</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!--<div class="col-lg-3" style="left: 35%">-->
+    <!--<form action="/dataAnalysis/data/upload" method="post" enctype = "multipart/form-data">-->
+    <!--&lt;!&ndash; <input type = "hidden" name = "method" value ="upload"> &ndash;&gt;-->
+    <!--<input type = "text" name = "fileName" >-->
+    <!--<input type = "file" name = "files[]" >-->
+    <!--<input type = "submit" value = "上传文件">-->
+    <!--</form>-->
+    <!--</div>-->
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+<div class="row footer">
+    <div class="col-md-6 text-right">
+        Graduation
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="js/vendor/jquery.ui.widget.js"></script>
+<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+<script src="https://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+<script src="https://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script>
+    function loadFile(file) {
+        $("#filename").html(file.name);
+    }
+</script>
+<script>
+    $("#add-data-save").click(function () {
+        var formData = new FormData(document.getElementById("import-data"));
+        $.ajax({
+            type: "post",
+            data: formData,
+            url: "/dataAnalysis/data/upload",
+            datatype: "json",
+            processData: false,
+            contentType: false,
+            async: false,
+            success: function () {
+                alert("上传中，请等待一段时间后再查看上传数据")
+                $("#content").load("/dataAnalysis/static/data-control.html")
+            },
+            error: function () {
+                alert("添加用户失败，请联系管理员")
+                $("#content").load("/dataAnalysis/static/data-control.html")
+            }
+        })
+    })
+</script>
+</body>
+</html>

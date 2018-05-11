@@ -13,14 +13,14 @@
     <h1 class="title">用户管理</h1>
     <ol class="breadcrumb">
         <li><a href="index.html">主页</a></li>
-        <li><a href="#">系统管理</a></li>
-        <li class="active">用户管理</li>
+        <li><a href="#">数据管理</a></li>
+        <li class="active">查看数据</li>
     </ol>
 
     <!-- Start Page Header Right Div -->
     <div class="right">
         <form class="searchform right">
-            <input type="text" id="searchbox" placeholder="用户名">
+            <input type="text" id="datasearchbox" placeholder="文件名">
             <span class="searchbutton"><i class="fa fa-search"></i></span>
         </form>
     </div>
@@ -35,10 +35,14 @@
 <div class="container-padding">
     <!-- Start Row -->
     <!--这里初步规划1行3个，大概差不多吧-->
-    <div class="row" id="row">
+    <div class="row" id="data-row">
     </div>
 </div>
 <!--这是为了留白，不至于太难看-->
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -104,19 +108,13 @@ Bootstrap Date Range Picker
 ================================================ -->
 <script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
 <!--这里定义一个模板-->
-<script id='user-date' type='text/html'>
+<script id='date-tmp' type='text/html'>
     <div class="col-sm-4 col-md-4">
         <div class="panel panel-default">
             <div class="panel-title">
-                ${userName}
+                ${fileName}
                 <ui class="panel-tools">
-                    <li data-toggle="tooltip" title="修改信息" onclick="changeUserInfos(this)">
-                        <a class="icon">
-                            <i class="fa fa-pencil">
-                            </i>
-                        </a>
-                    </li>
-                    <li data-toggle="tooltip" title="删&nbsp;除" onclick="deleteUserInfos(this)">
+                    <li data-toggle="tooltip" title="删&nbsp;除" onclick="deleteDataInfos(this)">
                         <a class="icon">
                             <i class="fa fa-trash">
                             </i>
@@ -125,46 +123,43 @@ Bootstrap Date Range Picker
                 </ui>
             </div>
             <div class="panel-body">
-                <p>
-                    <img src="img/head/head1.png" alt="IMG" class="img-circle center-block"
-                         style="width: 15%;height: 15%">
-                </p>
                 <ui class="basic-list">
                     <li>
-                        用户名：${userName}
+                        文件名：${fileName}
                     </li>
                     <li>
-                        手机：${phone}
+                        上传人：${userName}
                     </li>
                     <li>
-                        角色：&nbsp;
-                        {{each(i,roleinfo) roleInfos}}
-                        <a href="#" class="btn btn-rounded btn-default btn-sm">${roleinfo}</a>
-                        {{/each}}
+                        上传时间：${formatDate(time)}
                     </li>
                     <li>
-                        备注：${description}
+                        描述：${description}
                     </li>
                 </ui>
+                <br>
+                <button type="button" class="btn btn-default" id="show-detail-data" onclick="showDetailData(this)">
+                    详细信息
+                </button>
             </div>
         </div>
     </div>
 </script>
 <script>
     $(document).ready(function () {
-        getUserData()
+        getBriefData()
     })
 
     // 加载该页面的时候从后台获取相关数据信息
-    function getUserData() {
-        var userDataTmpl = $('#user-date').html()
-        $.template("userData", userDataTmpl)
+    function getBriefData() {
+        var dataTmpl = $('#date-tmp').html()
+        $.template("dataTmpl", dataTmpl)
         $.ajax({
                 type: "post",
-                url: "/dataAnalysis/user/getUserData",
+                url: "/dataAnalysis/data/getData",
                 async: false,
                 success: function (data) {
-                    $.tmpl("userData", data).appendTo("#row")
+                    $.tmpl("dataTmpl", data).appendTo("#data-row")
                 },
                 error: function (data) {
                     alert(data["status"])
@@ -173,27 +168,14 @@ Bootstrap Date Range Picker
         )
     }
 
-    // 修改用户信息
-    function changeUserInfos(value) {
-        var changeUserName = $(value).closest('div').text().trim()
-        $.ajax({
-                type: "post",
-                url: "/dataAnalysis/user/saveChangeUserName",
-                data: {"changeusername": changeUserName},
-                async: true,
-                success: function () {
-                    $("#content").load("/dataAnalysis/static/change-userinfo.html", function () {
-                        $("#changed-username").append("你正在修改的用户是：" + changeUserName)
-                    })
-                },
-                error: function (data) {
-                    alert(data["status"])
-                }
-            }
-        )
+    // 时间戳转日期
+    function formatDate(time) {
+        var date = new Date()
+        date.setTime(time)
+        return date.toLocaleString()
     }
 
-    function deleteUserInfos(value){
+    function deleteUserInfos(value) {
         var deleteusername = $(value).closest('div').text().trim()
         $.ajax({
                 type: "post",
@@ -202,6 +184,25 @@ Bootstrap Date Range Picker
                 async: true,
                 success: function () {
                     $("#content").load("/dataAnalysis/static/user-control.html")
+                },
+                error: function (data) {
+                    alert(data["status"])
+                }
+            }
+        )
+    }
+
+    function showDetailData(value) {
+        // 找到操作的文件的名字
+        var fileName = $(value).parent().parent().children("div:first-child").text().trim()
+        var userName = $(value).parent().children("ui").children("li").eq(1).text().trim()
+        $.ajax({
+                type: "post",
+                url: "/dataAnalysis/data/saveFileName",
+                data: {"fileName": fileName, "userName": userName},
+                async: true,
+                success: function () {
+                    $("#content").load("/dataAnalysis/static/data-show.html")
                 },
                 error: function (data) {
                     alert(data["status"])
