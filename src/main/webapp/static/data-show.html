@@ -64,51 +64,23 @@
         </div>
     </div>
     <div class="col-md-8">
-        <div class="panel panel-widget">
+        <div class="panel panel-default">
+            评论
             <div class="panel-title">
-                Inbox <span class="label label-danger">9</span>
                 <ul class="panel-tools">
                     <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
                     <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a></li>
                     <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
                 </ul>
             </div>
-            <div class="panel-body">
-                <ul class="mailbox-inbox">
+            <div class="panel-body status">
+                <ul class="comments">
+                    <div class="pre-scrollable" id="data-comment-show">
+                    </div>
                     <li>
-                        <a href="#" class="item clearfix">
-                            <img src="img/profileimg.png" alt="img" class="img">
-                            <span class="from">Jonathan Doe</span>
-                            Hello, m8 how is goin ?
-                            <span class="date">22 May</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="item clearfix">
-                            <img src="img/profileimg2.png" alt="img" class="img">
-                            <span class="from">Egemem Ka</span>
-                            Problems look mighty small...
-                            <span class="date">22 May</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="item clearfix">
-                            <img src="img/profileimg3.png" alt="img" class="img">
-                            <span class="from">James Throwing</span>
-                            New job offer ?
-                            <span class="date">22 May</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="item clearfix">
-                            <img src="img/profileimg4.png" alt="img" class="img">
-                            <span class="from">Timmy Jefsin</span>
-                            Tonight Party
-                            <span class="date">22 May</span>
-                        </a>
+                        <input type="text" class="form-control" placeholder="请输入评论..." id="data-comment">
                     </li>
                 </ul>
-
             </div>
         </div>
     </div>
@@ -277,15 +249,6 @@ Bootstrap Date Range Picker
 ================================================ -->
 <script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
 
-<script id='user-date' type='text/html'>
-    <tr>
-        <td>965</td>
-        <td>Kode Dashboard Template</td>
-        <td><span class="label label-default">Developing</span></td>
-        <td class="text-right"><span class="demo-project-stats"></span></td>
-    </tr>
-</script>
-
 <script type="text/javascript">
     // 采样频率统一为100HZ
     var baseData;
@@ -297,6 +260,8 @@ Bootstrap Date Range Picker
         formatTdData()
         formatScatterData()
         simpleData()
+        comment()
+        getComment()
     })
 
     function getData() {
@@ -330,6 +295,28 @@ Bootstrap Date Range Picker
                     '    </tr>')
             }
         }
+    }
+
+    // 获取评论信息
+    function getComment() {
+        var fileName = $("#show-filename1").text().trim();
+        $.ajax({
+                type: "post",
+                url: "/dataAnalysis/data/getAllComment",
+                data: {"fileName": fileName},
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#data-comment-show").append('<li>\n' +
+                            '                            <span class="name">' + data[i]["sendUserName"] + '&nbsp&nbsp&nbsp&nbsp' + formatDate(data[i]["time"]) + '</span>\n' +
+                            data[i]["content"] +
+                            '                        </li>')
+                    }
+                },
+                error: function (data) {
+                    alert(data["status"])
+                }
+            }
+        )
     }
 
     // 多元回归
@@ -620,6 +607,86 @@ Bootstrap Date Range Picker
         date.setTime(time)
         return date.toLocaleString()
     }
+<<<<<<< .mine
+
+    // 发表评论绑定回车事件
+    function comment() {
+        $("#data-comment").keydown(function (event) {
+            // 这里不能用强等
+            if (event.which == "13") {
+                var content = $(this).val().trim();
+                var fileName = $("#show-filename1").text().trim();
+                $("#data-comment").val("")
+                $.ajax({
+                        type: "post",
+                        url: "/dataAnalysis/data/comment",
+                        data: {"content": content, "fileName": fileName},
+                        success: function (data) {
+                            $("#data-comment-show").append('<li>\n' +
+                                '                            <span class="name">' + data["userName"] + '&nbsp&nbsp&nbsp&nbsp' + formatDate(new Date().getTime()) + '</span>\n' +
+                                content +
+                                '                        </li>')
+                        },
+                        error: function (data) {
+                            alert(data["status"])
+                        }
+                    }
+                )
+            }
+        })
+    }
+
+    function big(value) {
+        var windowWidth = $(window).width();
+        var panelWidth = $("#polynomial").outerWidth(true);
+        // 如果是放大，要将图像展示同步放大
+        if ($(this).parents(".panel").hasClass('panel-fullsize')) {
+            $(this).parents(".panel").removeClass('panel-fullsize');
+        }
+        else {
+            $(this).parents(".panel").addClass('panel-fullsize');
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
 
     // 展示全部原始数据
     function originalDataExpend(value) {
@@ -698,6 +765,7 @@ Bootstrap Date Range Picker
             $(value).parents(".panel").addClass('panel-fullsize');
         }
     }
+>>>>>>> .theirs
 </script>
 </body>
 </html>

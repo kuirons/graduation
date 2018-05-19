@@ -2,6 +2,7 @@ package com.graduation.logic.db.impl;
 
 import com.graduation.data.bean.DataBean;
 import com.graduation.data.bean.DataGBean;
+import com.graduation.data.bean.MessageBean;
 import com.graduation.logic.db.HbaseManager;
 import com.graduation.util.CommonUtil;
 import org.apache.hadoop.hbase.client.Put;
@@ -22,6 +23,8 @@ public class DataDBImpl {
   private static final String TABLE_NAME_ALL = "graduation_data_all";
   // 这是用来存放粗略信息的表
   private static final String TABLE_NAME = "graduation_data";
+  // 这是用来存放评论信息的表
+  private static final String TABLE_COMMENT = "graduation_comment";
   @Autowired HbaseManager hbaseManager;
 
   public void saveDataAll(DataGBean dataGBean) {
@@ -157,5 +160,35 @@ public class DataDBImpl {
     dataBean.setJsonStatisticsY(
         CommonUtil.bytesToString(result.getValue("datainfo".getBytes(), "statisticsy".getBytes())));
     return dataBean;
+  }
+
+  public boolean saveContent(MessageBean messageBean) {
+    if (messageBean == null) return false;
+    Put put = new Put(messageBean.toString().getBytes());
+    put.addColumn(
+        "commentinfo".getBytes(), "userName".getBytes(), messageBean.getSendUserName().getBytes());
+    put.addColumn(
+        "commentinfo".getBytes(), "content".getBytes(), messageBean.getContent().getBytes());
+    hbaseManager.synPut(TABLE_COMMENT, put);
+    return true;
+  }
+
+  public List<MessageBean> getContentByFileName(String fileName) {
+    List<MessageBean> messageBeans = new ArrayList<>();
+    PrefixFilter filter = new PrefixFilter(fileName.getBytes());
+    ResultScanner scanner = hbaseManager.getScan(TABLE_COMMENT, null, filter);
+    scanner.forEach(
+        result -> {
+          MessageBean messageBean = new MessageBean(CommonUtil.bytesToString(result.getRow()));
+          messageBean.setSendUserName(
+              CommonUtil.bytesToString(
+                  result.getValue("commentinfo".getBytes(), "userName".getBytes())));
+          messageBean.setContent(
+              CommonUtil.bytesToString(
+                  result.getValue("commentinfo".getBytes(), "content".getBytes())));
+          messageBeans.add(messageBean);
+        });
+    scanner.close();
+    return messageBeans;
   }
 }

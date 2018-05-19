@@ -44,6 +44,8 @@ public class AppInitialize implements InitializingBean {
     LOGGER.info("通用数据表OK！");
     checkTable("graduation_data_all");
     LOGGER.info("数据表OK！");
+    checkTable("graduation_comment");
+    LOGGER.info("评论表OK！");
   }
 
   // 表的关系自己维护
@@ -100,6 +102,11 @@ public class AppInitialize implements InitializingBean {
         msg = "通用数据表";
         put = null;
         families = new String[] {"datainfo"};
+        break;
+      case "graduation_comment":
+        msg = "评论表";
+        put = null;
+        families = new String[] {"commentinfo"};
         break;
       default:
         return;

@@ -3,6 +3,7 @@ package com.graduation.logic.datamanager;
 import com.alibaba.fastjson.JSON;
 import com.graduation.data.bean.DataBean;
 import com.graduation.data.bean.DataGBean;
+import com.graduation.data.bean.MessageBean;
 import com.graduation.logic.db.impl.DataDBImpl;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.hadoop.fs.FileUtil;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -129,5 +129,18 @@ public class DataManager {
 
   public DataBean getSimpleData(String fileName) {
     return dataDB.getSimpleData(fileName);
+  }
+
+  public boolean saveContent(String content, Object userName,String fileName) {
+    MessageBean messageBean = new MessageBean();
+    messageBean.setFileName(fileName);
+    messageBean.setContent(content);
+    messageBean.setSendUserName((String) userName);
+    messageBean.setTime(System.currentTimeMillis());
+    return dataDB.saveContent(messageBean);
+  }
+
+  public List<MessageBean> getAllComment(String fileName) {
+    return dataDB.getContentByFileName(fileName);
   }
 }

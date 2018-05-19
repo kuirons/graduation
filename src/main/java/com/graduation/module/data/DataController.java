@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.graduation.data.bean.DataBean;
 import com.graduation.data.bean.DataGBean;
+import com.graduation.data.bean.MessageBean;
 import com.graduation.logic.datamanager.DataManager;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,5 +109,24 @@ public class DataController {
       return "{\"status\":\"fail\"}";
     }
     return JSON.toJSONString(dataBean);
+  }
+
+  @RequestMapping(value = "/comment", produces = "application/json;charset=UTF-8")
+  @ResponseBody
+  public String comment(
+      @RequestParam(value = "content") String content,
+      @RequestParam(value = "fileName") String fileName,
+      HttpServletRequest request) {
+    HttpSession session = request.getSession();
+    if (dataManager.saveContent(content, session.getAttribute("username"), fileName))
+      return "{\"status\":\"success\",\"userName\":\"" + session.getAttribute("username") + "\"}";
+    return "{\"status\":\"fail\"}";
+  }
+
+  @RequestMapping(value = "/getAllComment", produces = "application/json;charset=UTF-8")
+  @ResponseBody
+  public String getAllComment(@RequestParam(value = "fileName") String fileName) {
+    List<MessageBean> results = dataManager.getAllComment(fileName);
+    return JSON.toJSONString(results);
   }
 }
