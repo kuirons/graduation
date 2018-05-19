@@ -117,7 +117,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-title">
-                原始数据概览
+                源数据概览
                 <ul class="panel-tools">
                     <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
                     <li><a class="icon" onclick="originalDataExpend(this)"><i class="fa fa-expand"></i></a>
@@ -130,17 +130,17 @@
                 <form class="form-inline" style="display: none" id="data-show-tools">
                     <div class="form-group">
                         <label class="form-label">跳转页:</label>
-                        <input type="text" placeholder="1" name="">
+                        <input type="text" placeholder="1" id="data-show-filter-page">
                     </div>
                     <div class="form-group">
                         <label class="form-label">子孔镜:</label>
-                        <input type="text" placeholder="1">
+                        <input type="text" placeholder="1" id="data-show-filter-subpan">
                     </div>
                     <div class="form-group">
                         <label class="form-label">帧序号:</label>
-                        <input type="text" placeholder="1">
+                        <input type="text" placeholder="1" id="data-show-filter-frame">
                     </div>
-                    <button type="button" class="btn btn-default">过滤</button>
+                    <button type="button" class="btn btn-default" onclick="dataFilter()">过滤</button>
                     <br>
                     <br>
                     <br>
@@ -169,7 +169,7 @@
                 多项式回归
                 <ul class="panel-tools">
                     <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
-                    <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a>
+                    <li><a class="icon" onclick="polynomialExpend(this)"><i class="fa fa-expand"></i></a>
                     </li>
                     <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
                 </ul>
@@ -635,12 +635,68 @@ Bootstrap Date Range Picker
             $("#data-show-tools").show()
             // 先将原来的元素清除掉,用empty不要用remove
             $("#detail-data-infos").empty()
-            // 添加一些选项
-
+            renderingTable(baseData, 1, 1, 0)
         }
     }
 
-    function renderingTable(data) {
+    function renderingTable(data, page, subPan, frame) {
+        if (subPan > data.length) {
+            alert("子孔镜输入错误")
+            return
+        }
+        var x = JSON.parse(data[subPan - 1]["jsonX"]);
+        var y = JSON.parse(data[subPan - 1]["jsonY"]);
+        // 显示所有帧的数据，肯定是大于30条的
+        if (frame === 0) {
+            var number = 20 * (page - 1);
+            var remainder = x.length - number
+            if (remainder <= 0) {
+                alert("页数输入错误")
+            }
+            var max = remainder > 20 ? 20 : remainder
+            for (var i = 0; i < max; i++) {
+                var fps = number + i + 1
+                $("#detail-data-infos").append('<tr>\n' +
+                    '        <td>' + subPan + '</td>\n' +
+                    '        <td>' + fps + '</td>\n' +
+                    '        <td>' + x[number + i] + '</td>\n' +
+                    '        <td >' + y[number + i] + '</td>\n' +
+                    '    </tr>')
+            }
+        } else {
+            // 显示单帧数据
+            $("#detail-data-infos").append('<tr>\n' +
+                '        <td>' + subPan + '</td>\n' +
+                '        <td>' + frame + '</td>\n' +
+                '        <td>' + x[frame] + '</td>\n' +
+                '        <td >' + y[frame] + '</td>\n' +
+                '    </tr>')
+        }
+    }
+
+    function dataFilter() {
+        var page = $("#data-show-filter-page").val().trim();
+        var subPan = $("#data-show-filter-subpan").val().trim();
+        var frame = $("#data-show-filter-frame").val().trim();
+        if (page === "")
+            page = "1"
+        if (subPan === "")
+            subPan = "1";
+        if (frame === "")
+            frame = "0";
+        $("#detail-data-infos").empty()
+        renderingTable(baseData, parseInt(page), parseInt(subPan), parseInt(frame))
+    }
+
+    function polynomialExpend(value) {
+        if ($(value).parents(".panel").hasClass('panel-fullsize')) {
+            $(value).parents(".panel").removeClass('panel-fullsize');
+            $("#polynomial").empty()
+            formatDataPolynomial()
+        }
+        else {
+            $(value).parents(".panel").addClass('panel-fullsize');
+        }
     }
 </script>
 </body>
