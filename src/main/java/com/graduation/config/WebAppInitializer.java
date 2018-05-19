@@ -43,6 +43,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
   @Override
   protected void customizeRegistration(ServletRegistration.Dynamic registration) {
     registration.setMultipartConfig(
-        new MultipartConfigElement("D:\\程序用\\src\\javaProgram\\graduation\\src\\main\\resources"));
+        // 默认上传到程序的发布目录
+        new MultipartConfigElement(""));
   }
 }

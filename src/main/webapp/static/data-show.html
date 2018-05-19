@@ -116,7 +116,35 @@
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
+            <div class="panel-title">
+                原始数据概览
+                <ul class="panel-tools">
+                    <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
+                    <li><a class="icon" onclick="originalDataExpend(this)"><i class="fa fa-expand"></i></a>
+                    </li>
+                    <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
+                </ul>
+            </div>
             <div class="panel-body table-responsive pre-scrollable">
+                <!--这部分只有在全屏的时候才显示-->
+                <form class="form-inline" style="display: none" id="data-show-tools">
+                    <div class="form-group">
+                        <label class="form-label">跳转页:</label>
+                        <input type="text" placeholder="1" name="">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">子孔镜:</label>
+                        <input type="text" placeholder="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">帧序号:</label>
+                        <input type="text" placeholder="1">
+                    </div>
+                    <button type="button" class="btn btn-default">过滤</button>
+                    <br>
+                    <br>
+                    <br>
+                </form>
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -242,6 +270,7 @@ Bootstrap Toggle
 Moment.js
 ================================================ -->
 <script type="text/javascript" src="js/moment/moment.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-table.js"></script>
 
 <!-- ================================================
 Bootstrap Date Range Picker
@@ -277,26 +306,30 @@ Bootstrap Date Range Picker
                 async: false,
                 success: function (data) {
                     baseData = data
-                    for (var i = 0; i < data.length; i++) {
-                        var x = JSON.parse(data[i]["jsonX"])
-                        var y = JSON.parse(data[i]["jsonY"])
-                        var sub = i + 1
-                        for (var j = 0; j < 5; j++) {
-                            var fps = j + 1
-                            $("#detail-data-infos").append('<tr>\n' +
-                                '        <td>' + sub + '</td>\n' +
-                                '        <td>' + fps + '</td>\n' +
-                                '        <td>' + x[j] + '</td>\n' +
-                                '        <td >' + y[j] + '</td>\n' +
-                                '    </tr>')
-                        }
-                    }
+                    showRoughData(data)
                 },
                 error: function (data) {
                     alert(data["status"])
                 }
             }
         )
+    }
+
+    function showRoughData(data) {
+        for (var i = 0; i < data.length; i++) {
+            var x = JSON.parse(data[i]["jsonX"])
+            var y = JSON.parse(data[i]["jsonY"])
+            var sub = i + 1
+            for (var j = 0; j < 5; j++) {
+                var fps = j + 1
+                $("#detail-data-infos").append('<tr>\n' +
+                    '        <td>' + sub + '</td>\n' +
+                    '        <td>' + fps + '</td>\n' +
+                    '        <td>' + x[j] + '</td>\n' +
+                    '        <td >' + y[j] + '</td>\n' +
+                    '    </tr>')
+            }
+        }
     }
 
     // 多元回归
@@ -586,6 +619,28 @@ Bootstrap Date Range Picker
         var date = new Date()
         date.setTime(time)
         return date.toLocaleString()
+    }
+
+    // 展示全部原始数据
+    function originalDataExpend(value) {
+        if ($(value).parents(".panel").hasClass('panel-fullsize')) {
+            $(value).parents(".panel").removeClass('panel-fullsize');
+            $(value).parents(".panel").children('.panel-body').addClass('pre-scrollable');
+            $("#data-show-tools").hide()
+            showRoughData(baseData)
+        }
+        else {
+            $(value).parents(".panel").addClass('panel-fullsize');
+            $(value).parents(".panel").children('.panel-body').removeClass('pre-scrollable');
+            $("#data-show-tools").show()
+            // 先将原来的元素清除掉,用empty不要用remove
+            $("#detail-data-infos").empty()
+            // 添加一些选项
+
+        }
+    }
+
+    function renderingTable(data) {
     }
 </script>
 </body>
