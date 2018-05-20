@@ -1,4 +1,4 @@
-package com.graduation.logic.datamanager;
+package com.graduation.logic.data;
 
 import com.alibaba.fastjson.JSON;
 import com.graduation.data.bean.DataBean;

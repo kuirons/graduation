@@ -146,7 +146,27 @@
                     <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
                 </ul>
             </div>
-            <div class="panel-body" id="polynomial" style="width: 100%;height:600px;">
+            <div class="panel-body">
+                <!--这部分只有在全屏的时候才显示-->
+                <form class="form-inline" style="display: none" id="data-show-polynomial-tools">
+                    <div class="form-group">
+                        <label class="form-label">多项式次数:</label>
+                        <input type="text" placeholder="1" id="data-show-polynomial-order">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">采样频率:</label>
+                        <input type="text" placeholder="0-1" id="data-show-polynomial-hz">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">子孔镜序号:</label>
+                        <input type="text" placeholder="1" id="data-show-polynomial-subpan">
+                    </div>
+                    <button type="button" class="btn btn-default" onclick="dataPolynomialFilter()">过滤</button>
+                    <br>
+                    <br>
+                    <br>
+                </form>
+                <div id="polynomial" style="width: 100%;height:600px;"></div>
             </div>
         </div>
     </div>
@@ -156,12 +176,28 @@
                 折线图
                 <ul class="panel-tools">
                     <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
-                    <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a>
+                    <li><a class="icon" onclick="discountExpend(this)"><i class="fa fa-expand"></i></a>
                     </li>
                     <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
                 </ul>
             </div>
-            <div class="panel-body" id="discount" style="width: 100%;height:600px;">
+            <div class="panel-body">
+                <!--这部分只有在全屏的时候才显示-->
+                <form class="form-inline" style="display: none" id="data-show-discount-tools">
+                    <div class="form-group">
+                        <label class="form-label">采样频率:</label>
+                        <input type="text" placeholder="0-1" id="data-show-discount-hz">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">子孔镜序号:</label>
+                        <input type="text" placeholder="1" id="data-show-discount-subpan">
+                    </div>
+                    <button type="button" class="btn btn-default" onclick="dataDiscountFilter()">过滤</button>
+                    <br>
+                    <br>
+                    <br>
+                </form>
+                <div id="discount" style="width: 100%;height:600px;"></div>
             </div>
         </div>
     </div>
@@ -173,12 +209,28 @@
                 散点图
                 <ul class="panel-tools">
                     <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
-                    <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a>
+                    <li><a class="icon" onclick="scatterExpend(this)"><i class="fa fa-expand"></i></a>
                     </li>
                     <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
                 </ul>
             </div>
-            <div class="panel-body" id="scatter" style="width: 100%;height:600px;">
+            <div class="panel-body">
+                <!--这部分只有在全屏的时候才显示-->
+                <form class="form-inline" style="display: none" id="data-show-scatter-tools">
+                    <div class="form-group">
+                        <label class="form-label">采样频率:</label>
+                        <input type="text" placeholder="0-1" id="data-show-scatter-hz">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">子孔镜序号:</label>
+                        <input type="text" placeholder="1" id="data-show-scatter-subpan">
+                    </div>
+                    <button type="button" class="btn btn-default" onclick="dataScatterFilter()">过滤</button>
+                    <br>
+                    <br>
+                    <br>
+                </form>
+                <div id="scatter" style="width: 100%;height:600px;"></div>
             </div>
         </div>
     </div>
@@ -188,12 +240,27 @@
                 3d
                 <ul class="panel-tools">
                     <li><a class="icon minimise-tool"><i class="fa fa-minus"></i></a></li>
-                    <li><a class="icon expand-tool"><i class="fa fa-expand"></i></a>
+                    <li><a class="icon" onclick="tdExpend(this)"><i class="fa fa-expand"></i></a>
                     </li>
                     <li><a class="icon closed-tool"><i class="fa fa-times"></i></a></li>
                 </ul>
             </div>
             <div class="panel-body">
+                <!--这部分只有在全屏的时候才显示-->
+                <form class="form-inline" style="display: none" id="data-show-td-tools">
+                    <div class="form-group">
+                        <label class="form-label">采样频率:</label>
+                        <input type="text" placeholder="0-1" id="data-show-td-hz">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">子孔镜序号:</label>
+                        <input type="text" placeholder="1" id="data-show-td-subpan">
+                    </div>
+                    <button type="button" class="btn btn-default" onclick="dataTdFilter()">过滤</button>
+                    <br>
+                    <br>
+                    <br>
+                </form>
                 <div id="td" style="width: 100%;height:600px;"></div>
             </div>
         </div>
@@ -255,10 +322,10 @@ Bootstrap Date Range Picker
     $(document).ready(function () {
         // 后端过来的数据需要进行重新组合，一适合图表的格式
         getData();
-        formatDataPolynomial()
-        formatDataDiscount()
-        formatTdData()
-        formatScatterData()
+        formatDataPolynomial(50, 0.01, 1)
+        formatDataDiscount(0.01, 1)
+        formatTdData(0.1, 1)
+        formatScatterData(0.1, 1)
         simpleData()
         comment()
         getComment()
@@ -320,26 +387,30 @@ Bootstrap Date Range Picker
     }
 
     // 多元回归
-    function formatDataPolynomial() {
+    function formatDataPolynomial(order, hz, subPan) {
         var data = baseData;
-        var dataX = JSON.parse(data[0]["jsonX"])
-        var dataY = JSON.parse(data[0]["jsonY"])
+        if (subPan > data.length) {
+            alert("子孔镜不合法")
+            return
+        }
+        var dataX = JSON.parse(data[subPan - 1]["jsonX"])
+        var dataY = JSON.parse(data[subPan - 1]["jsonY"])
         var a = new Array()
         var j = 0;
-        for (var i = 0; i < dataX.length / 100; i++) {
+        for (var i = 0; i < dataX.length * hz; i++) {
             a[i] = new Array();
             a[i][0] = dataX[j]
             a[i][1] = dataY[j]
-            j = j + 100
+            j = j + Math.round(1 / hz)
         }
-        polynomial(a)
+        polynomial(a, order)
     }
 
-    function polynomial(data) {
+    function polynomial(data, order) {
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('polynomial'));
 
-        var myRegression = ecStat.regression('polynomial', data, 50);
+        var myRegression = ecStat.regression('polynomial', data, order);
 
         myRegression.points.sort(function (a, b) {
             return a[0] - b[0];
@@ -429,19 +500,23 @@ Bootstrap Date Range Picker
     }
 
     // 折线
-    function formatDataDiscount() {
+    function formatDataDiscount(hz, subPan) {
         var data = baseData;
-        var dataX = JSON.parse(data[0]["jsonX"])
-        var dataY = JSON.parse(data[0]["jsonY"])
+        if (subPan > data.length) {
+            alert("子孔镜输入不合法")
+            return
+        }
+        var dataX = JSON.parse(data[subPan - 1]["jsonX"])
+        var dataY = JSON.parse(data[subPan - 1]["jsonY"])
         var xx = new Array()
         var ax = new Array()
         var ay = new Array()
         var j = 0
-        for (var i = 0; i < dataX.length / 100; i++) {
-            xx[i] = 0.04096 * i
+        for (var i = 0; i < dataX.length * hz; i++) {
+            xx[i] = 4.096 * i * hz
             ax[i] = dataX[j]
             ay[i] = dataY[j]
-            j = j + 100
+            j = j + Math.round(1 / hz)
         }
         discount(ax, ay, xx)
     }
@@ -491,18 +566,22 @@ Bootstrap Date Range Picker
         myChart.setOption(option);
     }
 
-    function formatTdData() {
+    function formatTdData(hz, subPan) {
         var data = baseData;
-        var dataX = JSON.parse(data[0]["jsonX"])
-        var dataY = JSON.parse(data[0]["jsonY"])
+        if (subPan > data.length) {
+            alert("子孔镜不合法")
+            return
+        }
+        var dataX = JSON.parse(data[subPan - 1]["jsonX"])
+        var dataY = JSON.parse(data[subPan - 1]["jsonY"])
         var aa = new Array()
         var j = 0
-        for (var i = 0; i < dataX.length / 10; i++) {
+        for (var i = 0; i < dataX.length * hz; i++) {
             aa[i] = new Array()
             aa[i][0] = dataX[j]
             aa[i][1] = dataY[j]
-            aa[i][2] = 0.004096 * i
-            j = j + 10
+            aa[i][2] = 4.096 * i
+            j = j + Math.round(1 / hz)
         }
         tD(aa)
     }
@@ -525,15 +604,21 @@ Bootstrap Date Range Picker
         myChart.setOption(option);
     }
 
-    function formatScatterData() {
+    function formatScatterData(hz, subPan) {
         var data = baseData;
-        var dataX = JSON.parse(data[0]["jsonX"])
-        var dataY = JSON.parse(data[0]["jsonY"])
+        if (subPan > data.length) {
+            alert("输入子孔镜不合法")
+            return
+        }
+        var dataX = JSON.parse(data[subPan - 1]["jsonX"])
+        var dataY = JSON.parse(data[subPan - 1]["jsonY"])
         var a = new Array()
-        for (var i = 0; i < dataX.length; i++) {
+        var j = 0;
+        for (var i = 0; i < dataX.length * hz; i++) {
             a[i] = new Array();
-            a[i][0] = dataX[i]
-            a[i][1] = dataY[i]
+            a[i][0] = dataX[j]
+            a[i][1] = dataY[j]
+            j = j + Math.round(1 / hz)
         }
         scatter(a)
     }
@@ -615,6 +700,11 @@ Bootstrap Date Range Picker
             // 这里不能用强等
             if (event.which == "13") {
                 var content = $(this).val().trim();
+                // 如果评论为空
+                if (content === "") {
+                    alert("请输入有效评论！")
+                    return
+                }
                 var fileName = $("#show-filename1").text().trim();
                 $("#data-comment").val("")
                 $.ajax({
@@ -703,15 +793,129 @@ Bootstrap Date Range Picker
         renderingTable(baseData, parseInt(page), parseInt(subPan), parseInt(frame))
     }
 
+    // 多项式
     function polynomialExpend(value) {
         if ($(value).parents(".panel").hasClass('panel-fullsize')) {
             $(value).parents(".panel").removeClass('panel-fullsize');
+            $("#data-show-polynomial-tools").hide()
             $("#polynomial").empty()
-            formatDataPolynomial()
+            // 这其实会影响性能
+            document.getElementById('polynomial').setAttribute('_echarts_instance_', '')
+            formatDataPolynomial(50, 0.01, 1)
         }
         else {
             $(value).parents(".panel").addClass('panel-fullsize');
+            $("#data-show-polynomial-tools").show()
+            $("#polynomial").empty()
+            document.getElementById('polynomial').setAttribute('_echarts_instance_', '')
+            formatDataPolynomial(50, 0.01, 1)
         }
+    }
+
+    function dataPolynomialFilter() {
+        var order = $("#data-show-polynomial-order").val().trim()
+        var hz = $("#data-show-polynomial-hz").val().trim()
+        var subPan = $("#data-show-polynomial-subpan").val().trim()
+        if (order === "")
+            order = "25"
+        if (hz === "")
+            hz = "0.01";
+        if (subPan === "")
+            subPan = "1";
+        $("#polynomial").empty()
+        document.getElementById('polynomial').setAttribute('_echarts_instance_', '')
+        formatDataPolynomial(order, hz, subPan)
+    }
+
+    // 折线
+    function discountExpend(value) {
+        if ($(value).parents(".panel").hasClass('panel-fullsize')) {
+            $(value).parents(".panel").removeClass('panel-fullsize');
+            $("#data-show-discount-tools").hide()
+            $("#discount").empty()
+            // 这其实会影响性能
+            document.getElementById('discount').setAttribute('_echarts_instance_', '')
+            formatDataDiscount(0.01, 1);
+        }
+        else {
+            $(value).parents(".panel").addClass('panel-fullsize');
+            $("#data-show-discount-tools").show()
+            $("#discount").empty()
+            document.getElementById('discount').setAttribute('_echarts_instance_', '')
+            formatDataDiscount(0.01, 1)
+        }
+    }
+
+    function dataDiscountFilter() {
+        var hz = $("#data-show-discount-hz").val().trim()
+        var subPan = $("#data-show-discount-subpan").val().trim()
+        if (hz === "")
+            hz = "0.01"
+        if (subPan === "")
+            subPan = "1"
+        formatDataDiscount(hz, subPan)
+    }
+
+    // 散点
+    function scatterExpend(value) {
+        if ($(value).parents(".panel").hasClass('panel-fullsize')) {
+            $(value).parents(".panel").removeClass('panel-fullsize');
+            $("#data-show-scatter-tools").hide()
+            $("#scatter").empty()
+            // 这其实会影响性能
+            document.getElementById('scatter').setAttribute('_echarts_instance_', '')
+            formatScatterData(0.1, 1);
+        }
+        else {
+            $(value).parents(".panel").addClass('panel-fullsize');
+            $("#data-show-scatter-tools").show()
+            $("#scatter").empty()
+            document.getElementById('scatter').setAttribute('_echarts_instance_', '')
+            formatScatterData(0.1, 1)
+        }
+    }
+
+    function dataScatterFilter() {
+        var hz = $("#data-show-scatter-hz").val().trim()
+        var subPan = $("#data-show-scatter-subpan").val().trim()
+        if (hz === "")
+            hz = "0.01"
+        if (subPan === "")
+            subPan = "1"
+        formatScatterData(hz, subPan)
+    }
+
+    // 3d
+    function tdExpend(value) {
+        if ($(value).parents(".panel").hasClass('panel-fullsize')) {
+            $(value).parents(".panel").removeClass('panel-fullsize');
+            $("#data-show-td-tools").hide()
+            $("#td").empty()
+            // 这其实会影响性能
+            document.getElementById('td').setAttribute('_echarts_instance_', '')
+            $("#td").height(600)
+
+            formatTdData(0.1, 1);
+        }
+        else {
+            $(value).parents(".panel").addClass('panel-fullsize');
+            $("#data-show-td-tools").show()
+            $("#td").empty()
+            document.getElementById('td').setAttribute('_echarts_instance_', '')
+            // 这里重新设置以下高度
+            $("#td").height(750)
+            formatTdData(0.1, 1)
+        }
+    }
+
+    function dataTdFilter() {
+        var hz = $("#data-show-td-hz").val().trim()
+        var subPan = $("#data-show-td-subpan").val().trim()
+        if (hz === "")
+            hz = "0.01"
+        if (subPan === "")
+            subPan = "1"
+        formatTdData(hz, subPan)
     }
 </script>
 </body>

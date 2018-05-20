@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Created by kuirons on 18-4-6 */
 @Service
@@ -53,6 +55,7 @@ public class AppInitialize implements InitializingBean {
     String msg;
     Put put;
     String[] families;
+    List<Put> puts = new ArrayList<>();
     switch (tableName) {
       case "graduation_user":
         msg = "用户";
@@ -62,6 +65,7 @@ public class AppInitialize implements InitializingBean {
         put.addColumn("userinfo".getBytes(), "phone".getBytes(), "13548251111".getBytes());
         put.addColumn(
             "userinfo".getBytes(), "description".getBytes(), "这是超级管理员，可以为所欲为，而且你不能删除他".getBytes());
+        puts.add(put);
         families = new String[] {"userinfo"};
         break;
       case "graduation_role":
@@ -71,12 +75,17 @@ public class AppInitialize implements InitializingBean {
             "roleinfo".getBytes(),
             "description".getBytes(),
             "这是超级角色，可以为所欲为，你应该把所有的权限都给他，或者，把最高的权限给他".getBytes());
+        puts.add(put);
         families = new String[] {"roleinfo"};
         break;
       case "graduation_jurisdiction":
         msg = "权限";
         put = new Put("g_admin".getBytes());
         put.addColumn("jurisdictioninfo".getBytes(), "description".getBytes(), "超级用户权限".getBytes());
+        puts.add(put);
+        put = new Put("g_test".getBytes());
+        put.addColumn("jurisdictioninfo".getBytes(), "description".getBytes(), "测试权限".getBytes());
+        puts.add(put);
         families = new String[] {"jurisdictioninfo"};
         break;
       case "graduation_user_role":
@@ -85,34 +94,33 @@ public class AppInitialize implements InitializingBean {
         new UserRoleBean("admin", "ADMIN");
         put = new Put(new UserRoleBean("admin", "ADMIN").toString().getBytes());
         put.addColumn("info".getBytes(), "description".getBytes(), "aa".getBytes());
+        puts.add(put);
         families = new String[] {"info"};
         break;
       case "graduation_role_jurisdiction":
         msg = "角色-权限";
         put = new Put(new RoleJurisdicationBean("ADMIN", "g_admin").toString().getBytes());
         put.addColumn("info".getBytes(), "description".getBytes(), "aa".getBytes());
+        puts.add(put);
         families = new String[] {"info"};
         break;
       case "graduation_data_all":
-        msg = "详细数据表";
-        put = null;
+        msg = "详细数据";
         families = new String[] {"datainfo"};
         break;
       case "graduation_data":
-        msg = "通用数据表";
-        put = null;
+        msg = "通用数据";
         families = new String[] {"datainfo"};
         break;
       case "graduation_comment":
-        msg = "评论表";
-        put = null;
+        msg = "评论";
         families = new String[] {"commentinfo"};
         break;
       default:
         return;
     }
     try {
-      checkTable(tableName, msg, families, put);
+      checkTable(tableName, msg, families, puts);
     } catch (Exception e) {
       LOGGER.error("启动失败");
       System.exit(-1);
@@ -120,12 +128,12 @@ public class AppInitialize implements InitializingBean {
   }
 
   private void checkTable(
-      String tableName, String msg, @Nullable String[] families, @Nullable Put put)
+      String tableName, String msg, @Nullable String[] families, @Nullable List<Put> puts)
       throws Exception {
     if (!hbaseManager.existTable(tableName)) {
       LOGGER.info(msg + "表不存在，开始创建");
       hbaseManager.createTable(tableName, families);
-      if (put != null) hbaseManager.synPut(tableName, put);
+      if ((puts != null) && (puts.size() > 0)) hbaseManager.synPuts(tableName, puts);
       LOGGER.info(msg + "表创建完毕");
     }
   }

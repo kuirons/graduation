@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 
 /**
  * 根据权限控制前端系统管理标签的显示
+ *
  * @author WuGYu
  * @date 2018/4/27 16:13
  */
@@ -16,6 +17,15 @@ import java.io.PrintWriter;
 public class SystemController {
   @RequestMapping("/home/systemControl")
   public void systemControl(HttpServletResponse response) throws IOException {
+    doJob(response);
+  }
+
+  @RequestMapping("/home/logControl")
+  public void logControl(HttpServletResponse response) throws IOException {
+    doJob(response);
+  }
+
+  private void doJob(HttpServletResponse response) throws IOException {
     response.setContentType("application/json;charset=UTF-8");
     PrintWriter out = response.getWriter();
     out.write("{\"status\":\"success\"}");

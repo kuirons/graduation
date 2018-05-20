@@ -2,7 +2,11 @@ package com.graduation.module.user;
 
 import com.alibaba.fastjson.JSON;
 import com.graduation.data.extrabean.UserData;
+import com.graduation.logic.log.LogManager;
 import com.graduation.logic.user.UserManager;
+import com.graduation.module.user.log.AddUserLog;
+import com.graduation.module.user.log.ChangeUserLog;
+import com.graduation.module.user.log.DeleteUserLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +28,7 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
   @Autowired UserManager userManager;
+  @Autowired LogManager logManager;
 
   @RequestMapping(value = "/getUserData", produces = "application/json;charset=UTF-8")
   @ResponseBody
@@ -34,7 +39,6 @@ public class UserController {
     return JSON.toJSONString(allUserInfo);
   }
 
-  // todo 如果为空则表示不更改,这里其实有问题，需要上锁
   @RequestMapping(value = "/changeUserInfos", produces = "application/json;charset=UTF-8")
   @ResponseBody
   public void changeUserInfos(
@@ -44,6 +48,13 @@ public class UserController {
       HttpServletResponse response,
       HttpServletRequest request)
       throws IOException {
+    // 记录日志
+    logManager.log(
+        new ChangeUserLog(
+            (String) request.getSession().getAttribute("username"),
+            (String) request.getSession().getAttribute("changeUserName"),
+            JSON.toJSONString(changeRoleInfos),
+            changePhone));
     if (!userManager.changeUserInfos(
         changePhone,
         changeRoleInfos,
@@ -66,8 +77,16 @@ public class UserController {
       @RequestParam(value = "adduserdescription", required = false) String addUserDescription,
       @RequestParam(value = "addusername") String userName,
       @RequestParam(value = "adduserpassword") String addUserPassword,
-      HttpServletResponse response)
+      HttpServletResponse response,
+      HttpServletRequest request)
       throws IOException {
+    // 记录日志
+    logManager.log(
+        new AddUserLog(
+            (String) request.getSession().getAttribute("username"),
+            userName,
+            JSON.toJSONString(addRoleInfos),
+            addPhonenum));
     if (!userManager.addNewUserInfos(
         userName, addPhonenum, addUserDescription, addRoleInfos, addUserPassword))
       response.setStatus(500);
@@ -89,6 +108,9 @@ public class UserController {
       throws IOException {
     HttpSession session = request.getSession();
     session.setAttribute("changeUserName", changeUserName.trim());
+    // 记录日志
+    logManager.log(
+        new DeleteUserLog((String) session.getAttribute("username"), changeUserName.trim()));
     PrintWriter out = response.getWriter();
     out.write("{\"status\":\"success\"}");
     out.flush();

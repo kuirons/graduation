@@ -3,7 +3,11 @@ package com.graduation.module.role;
 import com.alibaba.fastjson.JSON;
 import com.graduation.data.bean.RoleBean;
 import com.graduation.data.extrabean.RoleData;
+import com.graduation.logic.log.LogManager;
 import com.graduation.logic.role.RoleManager;
+import com.graduation.module.role.log.AddRoleLog;
+import com.graduation.module.role.log.ChangeRoleLog;
+import com.graduation.module.role.log.DeleteRoleLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +29,7 @@ import java.util.List;
 @RequestMapping("/role")
 public class RoleController {
   @Autowired RoleManager roleManager;
+  @Autowired LogManager logManager;
 
   @RequestMapping(value = "/getAllRoleData", produces = "application/json;charset=UTF-8")
   @ResponseBody
@@ -42,7 +47,7 @@ public class RoleController {
 
   @RequestMapping(value = "/saveChangeRoleName", produces = "application/json;charset=UTF-8")
   @ResponseBody
-  public void saveChangeUserName(
+  public void saveChangeRoleName(
       @RequestParam(value = "changerolename") String changeRoleName,
       HttpServletRequest request,
       HttpServletResponse response)
@@ -55,7 +60,6 @@ public class RoleController {
     out.close();
   }
 
-  // todo 如果为空则表示不更改,这里其实有问题，需要上锁
   @RequestMapping(value = "/changeRoleInfos", produces = "application/json;charset=UTF-8")
   @ResponseBody
   public void changeRoleInfos(
@@ -65,6 +69,12 @@ public class RoleController {
       HttpServletResponse response,
       HttpServletRequest request)
       throws IOException {
+    // 记录日志
+    logManager.log(
+        new ChangeRoleLog(
+            (String) request.getSession().getAttribute("username"),
+            (String) request.getSession().getAttribute("changeRoleName"),
+            JSON.toJSONString(changePermissionInfos)));
     if (!roleManager.changeRoleInfos(
         newRoleDescription,
         changePermissionInfos,
@@ -84,8 +94,15 @@ public class RoleController {
       @RequestParam(value = "addPermissionInfos[]", required = false) String[] addPermissions,
       @RequestParam(value = "new-add-role-name", required = false) String roleName,
       @RequestParam(value = "new-add-role-description", required = false) String roleDescription,
-      HttpServletResponse response)
+      HttpServletResponse response,
+      HttpServletRequest request)
       throws IOException {
+    // 记录日志
+    logManager.log(
+        new AddRoleLog(
+            (String) request.getSession().getAttribute("username"),
+            roleName,
+            JSON.toJSONString(addPermissions)));
     if (!roleManager.addRoleInfos(roleName, roleDescription, addPermissions))
       response.setStatus(500);
     else {
@@ -100,8 +117,13 @@ public class RoleController {
   @RequestMapping(value = "/deleteRole", produces = "application/json;charset=UTF-8")
   @ResponseBody
   public void deleteRole(
-      @RequestParam(value = "deleteRoleName") String deleteName, HttpServletResponse response)
+      @RequestParam(value = "deleteRoleName") String deleteName,
+      HttpServletResponse response,
+      HttpServletRequest request)
       throws IOException {
+    // 记录日志
+    logManager.log(
+        new DeleteRoleLog((String) request.getSession().getAttribute("username"), deleteName));
     roleManager.deleteRole(deleteName);
     PrintWriter out = response.getWriter();
     out.write("{\"status\":\"success\"}");

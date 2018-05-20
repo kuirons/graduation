@@ -8,6 +8,7 @@ public enum Jurisdiction {
   g_select, // 查询数据的权限
   g_admin, // 管理权限的权限
   g_login, // 基本权限，可以访问主页
+  g_test, // 测试用权限
   ;
 
   public static Jurisdiction getPermission(String s) {
@@ -24,6 +25,8 @@ public enum Jurisdiction {
         return Jurisdiction.g_admin;
       case "g_login":
         return Jurisdiction.g_login;
+      case "g_test":
+        return Jurisdiction.g_test;
       default:
         return null;
     }

@@ -70,15 +70,17 @@ public class RoleJurisdicationDBImpl {
   }
 
   public boolean addRoleJurisdiction(String[] changePermissionInfos, String changeRoleName) {
-    Arrays.stream(changePermissionInfos)
-        .map(s -> new RoleJurisdicationBean(changeRoleName, s).toString())
-        .forEach(
-            s -> {
-              Put put = new Put(s.getBytes());
-              // 纯粹就是用来占位置得
-              put.addColumn("info".getBytes(), "description".getBytes(), "aa".getBytes());
-              hbaseManager.synPut(TABLENAME, put);
-            });
+    if (changePermissionInfos != null) {
+      Arrays.stream(changePermissionInfos)
+          .map(s -> new RoleJurisdicationBean(changeRoleName, s).toString())
+          .forEach(
+              s -> {
+                Put put = new Put(s.getBytes());
+                // 纯粹就是用来占位置得
+                put.addColumn("info".getBytes(), "description".getBytes(), "aa".getBytes());
+                hbaseManager.synPut(TABLENAME, put);
+              });
+    }
     return true;
   }
 

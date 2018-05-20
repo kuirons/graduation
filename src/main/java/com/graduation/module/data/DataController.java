@@ -5,7 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.graduation.data.bean.DataBean;
 import com.graduation.data.bean.DataGBean;
 import com.graduation.data.bean.MessageBean;
-import com.graduation.logic.datamanager.DataManager;
+import com.graduation.logic.data.DataManager;
+import com.graduation.logic.log.LogManager;
+import com.graduation.module.data.log.CheckDataLog;
+import com.graduation.module.data.log.CommentLog;
+import com.graduation.module.data.log.DataUploadLog;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +29,7 @@ import java.util.List;
 @RequestMapping("/data")
 public class DataController {
   @Autowired DataManager dataManager;
+  @Autowired LogManager logManager;
 
   @RequestMapping(
     value = "/upload",
@@ -62,6 +67,9 @@ public class DataController {
                 }
               });
       thread.start();
+      // 记录日志
+      logManager.log(
+          new DataUploadLog((String) session.getAttribute("username"), filename + suffix));
       res.put("status", "success");
     } else {
       res.put("msg", "上传失败");
@@ -86,6 +94,8 @@ public class DataController {
       HttpServletRequest request) {
     HttpSession session = request.getSession();
     session.setAttribute("fileName", userName.split("：")[1] + "-" + fileName);
+    // 记录日志
+    logManager.log(new CheckDataLog((String) session.getAttribute("username"), fileName));
     return "{\"status\":\"success\"}";
   }
 
@@ -118,6 +128,8 @@ public class DataController {
       @RequestParam(value = "fileName") String fileName,
       HttpServletRequest request) {
     HttpSession session = request.getSession();
+    // 记录日志
+    logManager.log(new CommentLog((String) session.getAttribute("username"), fileName, content));
     if (dataManager.saveContent(content, session.getAttribute("username"), fileName))
       return "{\"status\":\"success\",\"userName\":\"" + session.getAttribute("username") + "\"}";
     return "{\"status\":\"fail\"}";
