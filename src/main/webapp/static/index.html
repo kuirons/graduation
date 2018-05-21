@@ -37,17 +37,11 @@
                 <img src="img/head/head1.png" alt="img"><b>管理员</b>
                 <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-list dropdown-menu-right">
-                <!--<li role="presentation" class="dropdown-header">Profile</li>-->
-                <!--<li><a href="#"><i class="fa falist fa-inbox"></i>Inbox<span class="badge label-danger">4</span></a>-->
-                <!--</li>-->
-                <!--<li><a href="#"><i class="fa falist fa-file-o"></i>Files</a></li>-->
-                <!--<li><a href="#"><i class="fa falist fa-wrench"></i>Settings</a></li>-->
-                <!--<li class="divider"></li>-->
-                <li><a href="#"><i class="fa falist fa-pencil"></i>修改信息</a></li>
-                <li><a href="#"><i class="fa falist fa-lock"></i>锁屏</a></li>
-                <li><a href="#"><i class="fa falist fa-power-off"></i>退出</a></li>
-            </ul>
+            <!--<ul class="dropdown-menu dropdown-menu-list dropdown-menu-right">-->
+                <!--<li><a href="#"><i class="fa falist fa-pencil"></i>修改信息</a></li>-->
+                <!--<li><a href="#"><i class="fa falist fa-lock"></i>锁屏</a></li>-->
+                <!--<li><a href="#"><i class="fa falist fa-power-off"></i>退出</a></li>-->
+            <!--</ul>-->
         </li>
 
     </ul>
@@ -61,7 +55,6 @@
 <!-- //////////////////////////////////////////////////////////////////////////// -->
 <!-- START SIDEBAR -->
 <div class="sidebar clearfix">
-
     <ul class="sidebar-panel nav" id="main-panel">
         <li class="sidetitle">MAIN</li>
         <li><a href="index.html"><span class="icon color5"><i class="fa fa-home"></i></span>首页</a></li>
@@ -92,6 +85,8 @@
                 <li><a href="javascript:void(0)" id="operationLog">操作日志</a></li>
             </ul>
         </li>
+        <br>
+        <br>
         <br>
         <br>
         <br>
@@ -238,6 +233,7 @@ Below codes are only for index widgets
         logControl()
         systemLog()
         operationLog()
+        loadMainPage()
     })
 
     // 决定是否加载系统管理标签
@@ -278,6 +274,10 @@ Below codes are only for index widgets
                 }
             }
         )
+    }
+
+    function loadMainPage() {
+        $("#content").load("/dataAnalysis/static/main-page.html")
     }
 
     // 请求用户管理页面
