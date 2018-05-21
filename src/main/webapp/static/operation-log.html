@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OperationLog</title>
+
+    <!-- ========== Css Files ========== -->
+    <link href="css/root.css" rel="stylesheet">
+</head>
+<body>
+<!-- Start Page Header -->
+<div class="page-header">
+    <h1 class="title">日志管理</h1>
+    <ol class="breadcrumb">
+        <li><a href="index.html">主页</a></li>
+        <li><a href="#">日志管理</a></li>
+        <li class="active">操作日志</li>
+    </ol>
+</div>
+<!-- End Page Header -->
+
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+<!-- START CONTAINER -->
+<!--要在这里添加信息-->
+<div class="container-padding">
+    <!-- Start Row -->
+    <div class="row" id="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-title">
+                    操作日志
+                </div>
+                <div class="panel-body" id="operation-log">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--这是为了留白，不至于太难看-->
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!-- End Row -->
+<!-- END CONTAINER -->
+<!-- //////////////////////////////////////////////////////////////////////////// -->
+
+
+<!-- Start Footer -->
+<div class="row footer">
+    <div class="col-md-6 text-right">
+        Graduation
+    </div>
+</div>
+<!-- End Footer -->
+<!-- ================================================
+jQuery Library
+================================================ -->
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.tmpl.min.js"></script>
+
+<!-- ================================================
+Bootstrap Core JavaScript File
+================================================ -->
+<script src="js/bootstrap/bootstrap.min.js"></script>
+
+<!-- ================================================
+Plugin.js - Some Specific JS codes for Plugin Settings
+================================================ -->
+<script type="text/javascript" src="js/plugins.js"></script>
+
+<!-- ================================================
+Bootstrap Select
+================================================ -->
+<script type="text/javascript" src="js/bootstrap-select/bootstrap-select.js"></script>
+
+<!-- ================================================
+Bootstrap Toggle
+================================================ -->
+<script type="text/javascript" src="js/bootstrap-toggle/bootstrap-toggle.min.js"></script>
+
+<!-- ================================================
+Moment.js
+================================================ -->
+<script type="text/javascript" src="js/moment/moment.min.js"></script>
+
+<!-- ================================================
+Bootstrap Date Range Picker
+================================================ -->
+<script type="text/javascript" src="js/date-range-picker/daterangepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        getSystemLog()
+    })
+
+    function getSystemLog() {
+        $.ajax({
+                type: "post",
+                url: "/dataAnalysis/log/getOperationLog",
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#operation-log").append('<p>' + data[i] + '</p>')
+                    }
+                },
+                error: function (data) {
+                    alert(data["status"])
+                }
+            }
+        )
+    }
+</script>
+</body>
+</html>
