@@ -74,7 +74,7 @@ public class AppInitialize implements InitializingBean {
         put.addColumn(
             "roleinfo".getBytes(),
             "description".getBytes(),
-            "这是超级角色，可以为所欲为，你应该把所有的权限都给他，或者，把最高的权限给他".getBytes());
+            "系统管理员".getBytes());
         puts.add(put);
         families = new String[] {"roleinfo"};
         break;
@@ -83,8 +83,17 @@ public class AppInitialize implements InitializingBean {
         put = new Put("g_admin".getBytes());
         put.addColumn("jurisdictioninfo".getBytes(), "description".getBytes(), "超级用户权限".getBytes());
         puts.add(put);
-        put = new Put("g_test".getBytes());
-        put.addColumn("jurisdictioninfo".getBytes(), "description".getBytes(), "测试权限".getBytes());
+        put = new Put("g_normal".getBytes());
+        put.addColumn("jurisdictioninfo".getBytes(), "description".getBytes(), "基础权限".getBytes());
+        puts.add(put);
+        put = new Put("g_data".getBytes());
+        put.addColumn("jurisdictioninfo".getBytes(), "description".getBytes(), "数据操作权限".getBytes());
+        puts.add(put);
+        put = new Put("g_security".getBytes());
+        put.addColumn("jurisdictioninfo".getBytes(), "description".getBytes(), "权限操作".getBytes());
+        puts.add(put);
+        put = new Put("g_log".getBytes());
+        put.addColumn("jurisdictioninfo".getBytes(), "description".getBytes(), "日志操作".getBytes());
         puts.add(put);
         families = new String[] {"jurisdictioninfo"};
         break;

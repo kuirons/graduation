@@ -126,7 +126,7 @@ Bootstrap Date Range Picker
             </div>
             <div class="panel-body">
                 <p>
-                    <img src="img/head/head1.png" alt="IMG" class="img-circle center-block"
+                    <img src=${random()} alt="IMG" class="img-circle center-block"
                          style="width: 15%;height: 15%">
                 </p>
                 <ui class="basic-list">
@@ -193,7 +193,7 @@ Bootstrap Date Range Picker
         )
     }
 
-    function deleteUserInfos(value){
+    function deleteUserInfos(value) {
         var deleteusername = $(value).closest('div').text().trim()
         $.ajax({
                 type: "post",
@@ -208,6 +208,12 @@ Bootstrap Date Range Picker
                 }
             }
         )
+    }
+
+    function random() {
+        var random = Math.random() * 5+1;
+        var head = "img/head/head"+Math.round(random)+".png"
+        return head
     }
 </script>
 </body>
