@@ -324,9 +324,9 @@ Bootstrap Date Range Picker
     // 采样频率统一为100HZ
     var baseData;
     $(document).ready(function () {
-        // 后端过来的数据需要进行重新组合，一适合图表的格式
+        // 后端过来的数据需要进行重新组合，以适合图表的格式
         getData();
-        formatDataPolynomial(50, 0.01, 1)
+        formatDataPolynomial(50, 0.01, 1, "x")
         formatDataDiscount(0.01, 1)
         formatTdData(0.1, 1)
         formatScatterData(0.1, 1)
@@ -391,7 +391,7 @@ Bootstrap Date Range Picker
     }
 
     // 多项式回归
-    function formatDataPolynomial(order, hz, subPan,axis) {
+    function formatDataPolynomial(order, hz, subPan, axis) {
         var data = baseData;
         if (subPan > data.length) {
             alert("子孔镜不合法")
@@ -400,9 +400,9 @@ Bootstrap Date Range Picker
         var dataX = JSON.parse(data[subPan - 1]["jsonX"])
         var dataY = JSON.parse(data[subPan - 1]["jsonY"])
         var chooseData
-        if(axis==="x"){
+        if (axis === "x") {
             chooseData = dataX
-        }else{
+        } else {
             chooseData = dataY
         }
         var a = new Array()
@@ -811,14 +811,14 @@ Bootstrap Date Range Picker
             $("#polynomial").empty()
             // 这其实会影响性能
             document.getElementById('polynomial').setAttribute('_echarts_instance_', '')
-            formatDataPolynomial(50, 0.01, 1)
+            formatDataPolynomial(50, 0.01, 1, "x")
         }
         else {
             $(value).parents(".panel").addClass('panel-fullsize');
             $("#data-show-polynomial-tools").show()
             $("#polynomial").empty()
             document.getElementById('polynomial').setAttribute('_echarts_instance_', '')
-            formatDataPolynomial(50, 0.01, 1)
+            formatDataPolynomial(50, 0.01, 1, "x")
         }
     }
 
@@ -833,11 +833,13 @@ Bootstrap Date Range Picker
             hz = "0.01";
         if (subPan === "")
             subPan = "1";
-        if(axis === "")
+        if (axis === "")
             axis = "x"
+        else
+            axis = axis.toLowerCase()
         $("#polynomial").empty()
         document.getElementById('polynomial').setAttribute('_echarts_instance_', '')
-        formatDataPolynomial(order, hz, subPan)
+        formatDataPolynomial(order, hz, subPan, axis)
     }
 
     // 折线

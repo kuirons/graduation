@@ -2,7 +2,6 @@ package com.graduation.logic.db;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
@@ -34,26 +33,26 @@ public class HbaseManager {
   private static final String[] SPLIT_KEYS =
       new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E"};
 
-  /** 初始化连接 */
-  static {
-    try {
-      if (configuration == null) {
-        configuration = HBaseConfiguration.create();
-        // 禁用数值检查
-        configuration.set("hbase.client.keyvalue.maxsize", "0");
-        try {
-          if (connection == null) {
-            connection = ConnectionFactory.createConnection();
-          }
-        } catch (IOException e) {
-          LOGGER.error("获取Hbase连接失败", e);
-        }
-      }
-    } catch (Exception e) {
-      LOGGER.error("加载Hbase配置文件失败", e);
-      throw new RuntimeException(e);
-    }
-  }
+  //  /** 初始化连接 */
+  //  static {
+  //    try {
+  //      if (configuration == null) {
+  //        configuration = HBaseConfiguration.create();
+  //        // 禁用数值检查
+  //        configuration.set("hbase.client.keyvalue.maxsize", "0");
+  //        try {
+  //          if (connection == null) {
+  //            connection = ConnectionFactory.createConnection();
+  //          }
+  //        } catch (IOException e) {
+  //          LOGGER.error("获取Hbase连接失败", e);
+  //        }
+  //      }
+  //    } catch (Exception e) {
+  //      LOGGER.error("加载Hbase配置文件失败", e);
+  //      throw new RuntimeException(e);
+  //    }
+  //  }
 
   /**
    * 获取hbase连接，同一时间只允许一个请求获取到连接
@@ -61,25 +60,25 @@ public class HbaseManager {
    * @return
    */
   public synchronized Connection getConnection() {
-    try {
-      if (connection == null || connection.isClosed()) {
-        connection = ConnectionFactory.createConnection();
-      }
-    } catch (IOException e) {
-      LOGGER.error("获取Hbase连接失败", e);
-    }
+    //    try {
+    //      if (connection == null || connection.isClosed()) {
+    //        connection = ConnectionFactory.createConnection();
+    //      }
+    //    } catch (IOException e) {
+    //      LOGGER.error("获取Hbase连接失败", e);
+    //    }
     return connection;
   }
 
   /** 关闭连接 */
   public void closeConnection() {
-    if (connection != null) {
-      try {
-        connection.close();
-      } catch (IOException e) {
-        LOGGER.error("关闭Hbase连接失败", e);
-      }
-    }
+    //    if (connection != null) {
+    //      try {
+    //        connection.close();
+    //      } catch (IOException e) {
+    //        LOGGER.error("关闭Hbase连接失败", e);
+    //      }
+    //    }
   }
 
   private void tableAddFamilies(HTableDescriptor tableDescriptor, String cfs) {

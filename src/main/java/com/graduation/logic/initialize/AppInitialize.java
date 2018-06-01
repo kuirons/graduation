@@ -25,29 +25,29 @@ public class AppInitialize implements InitializingBean {
   // 这里主要保证程序运行需要的基本表存在
   @Override
   public void afterPropertiesSet() throws Exception {
-    LOGGER.info("开始检查表是否存在");
-    // 这里检查数据库表是否完备，如果不完备，创建默认的表并添加默认的用户
-    LOGGER.info("开始检查用户表");
-    checkTable("graduation_user");
-    LOGGER.info("用户表OK！");
-    LOGGER.info("开始检查角色表");
-    checkTable("graduation_role");
-    LOGGER.info("角色表OK！");
-    LOGGER.info("开始检查权限表");
-    checkTable("graduation_jurisdiction");
-    LOGGER.info("权限表OK！");
-    LOGGER.info("开始检查用户-角色表");
-    checkTable("graduation_user_role");
-    LOGGER.info("用户-角色表OK！");
-    LOGGER.info("开始检查角色-权限表");
-    checkTable("graduation_role_jurisdiction");
-    LOGGER.info("角色-权限表OK！");
-    checkTable("graduation_data");
-    LOGGER.info("通用数据表OK！");
-    checkTable("graduation_data_all");
-    LOGGER.info("数据表OK！");
-    checkTable("graduation_comment");
-    LOGGER.info("评论表OK！");
+//    LOGGER.info("开始检查表是否存在");
+//    // 这里检查数据库表是否完备，如果不完备，创建默认的表并添加默认的用户
+//    LOGGER.info("开始检查用户表");
+//    checkTable("graduation_user");
+//    LOGGER.info("用户表OK！");
+//    LOGGER.info("开始检查角色表");
+//    checkTable("graduation_role");
+//    LOGGER.info("角色表OK！");
+//    LOGGER.info("开始检查权限表");
+//    checkTable("graduation_jurisdiction");
+//    LOGGER.info("权限表OK！");
+//    LOGGER.info("开始检查用户-角色表");
+//    checkTable("graduation_user_role");
+//    LOGGER.info("用户-角色表OK！");
+//    LOGGER.info("开始检查角色-权限表");
+//    checkTable("graduation_role_jurisdiction");
+//    LOGGER.info("角色-权限表OK！");
+//    checkTable("graduation_data");
+//    LOGGER.info("通用数据表OK！");
+//    checkTable("graduation_data_all");
+//    LOGGER.info("数据表OK！");
+//    checkTable("graduation_comment");
+//    LOGGER.info("评论表OK！");
   }
 
   // 表的关系自己维护
