@@ -7,6 +7,8 @@ import com.graduation.logic.db.impl.RoleDBImpl;
 import com.graduation.logic.db.impl.RoleJurisdicationDBImpl;
 import com.graduation.logic.db.impl.UserRoleDBImpl;
 import com.graduation.logic.jurisdiction.JurisdictionManager;
+import com.graduation.logic.user.UserManager;
+import com.sun.xml.internal.stream.buffer.sax.DefaultWithLexicalHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class RoleManager {
   @Autowired RoleDBImpl roleDB;
   @Autowired RoleJurisdicationDBImpl roleJurisdicationDB;
   @Autowired JurisdictionManager jurisdictionManager;
+  @Autowired UserManager userManager;
 
   public List<UserRoleBean> getRolesByUserName(String userName) {
     List<UserRoleBean> roleInfos = userRoleDBImpl.getUserRoleByUserName(userName);
@@ -56,10 +59,10 @@ public class RoleManager {
   }
 
   public void deleteRole(String deleteName) {
-    // todo 这里删除要添加限制
     // 这里还是要删除两项
     roleDB.deleteRole(deleteName);
     roleJurisdicationDB.deletePermissionByUsername(deleteName);
+    userRoleDBImpl.deleteRoleByRoleName(deleteName);
   }
 
   public RoleData searchRoleInfos(String roleName) {

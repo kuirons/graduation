@@ -51,7 +51,6 @@ public class DataController {
           multipartFile.getInputStream(), new File("target/upload", filename + suffix));
       HttpSession session = request.getSession();
       String url = "target/upload/" + filename + suffix;
-      // todo 文件合法性检查
       // 这个实在太慢了，所以另起一个线程进行操作
       Thread thread =
           new Thread(

@@ -2,9 +2,13 @@ package com.graduation.logic.db.impl;
 
 import com.graduation.data.bean.UserRoleBean;
 import com.graduation.logic.db.HbaseManager;
+import com.graduation.util.CommonUtil;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
+import org.apache.hadoop.hbase.filter.RowFilter;
+import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -65,5 +69,16 @@ public class UserRoleDBImpl {
         .stream()
         .map(userRoleBean -> userRoleBean.toString())
         .forEach(s -> hbaseManager.delete(TABLENAME, s));
+  }
+
+  // 当删除一个角色的时候，同时要在用户角色表中删除包含该角色的条目
+  // todo 这个还没测
+  public void deleteRoleByRoleName(String deleteName) {
+    // 先构造个比较器,大小写不敏感
+    SubstringComparator comparator = new SubstringComparator(deleteName);
+    RowFilter filter = new RowFilter(CompareFilter.CompareOp.EQUAL, comparator);
+    ResultScanner scanner = hbaseManager.getScan(TABLENAME, null, filter);
+    scanner.forEach(
+        result -> hbaseManager.delete(TABLENAME, CommonUtil.bytesToString(result.getRow())));
   }
 }
