@@ -41,11 +41,6 @@
     </property>
     
     <property>
-      <name>hbase.custom-extensions.root</name>
-      <value>/hdp/ext/2.6/hbase</value>
-    </property>
-    
-    <property>
       <name>hbase.defaults.for.version.skip</name>
       <value>true</value>
     </property>
@@ -68,11 +63,6 @@
     <property>
       <name>hbase.hregion.memstore.block.multiplier</name>
       <value>4</value>
-    </property>
-    
-    <property>
-      <name>hbase.hregion.memstore.chunkpool.maxsize</name>
-      <value>1</value>
     </property>
     
     <property>
@@ -167,7 +157,7 @@
     
     <property>
       <name>hbase.rootdir</name>
-      <value>/apps/hbase/data</value>
+      <value>hdfs://master:8020/apps/hbase/data</value>
     </property>
     
     <property>
@@ -207,7 +197,7 @@
     
     <property>
       <name>hbase.zookeeper.quorum</name>
-      <value>slave1,slave2,master</value>
+      <value>master</value>
     </property>
     
     <property>
