@@ -175,22 +175,22 @@ Bootstrap Date Range Picker
         return date.toLocaleString()
     }
 
-    function deleteUserInfos(value) {
-        var deleteusername = $(value).closest('div').text().trim()
-        $.ajax({
-                type: "post",
-                url: "/dataAnalysis/user/delteUserInfos",
-                data: {"deleteusername": deleteusername},
-                async: true,
-                success: function () {
-                    $("#content").load("/dataAnalysis/static/user-control.html")
-                },
-                error: function (data) {
-                    alert(data["status"])
-                }
-            }
-        )
-    }
+    // function deleteDataInfos(value) {
+    //     var deleteusername = $(value).closest('div').text().trim()
+    //     $.ajax({
+    //             type: "post",
+    //             url: "/dataAnalysis/user/delteUserInfos",
+    //             data: {"deleteusername": deleteusername},
+    //             async: true,
+    //             success: function () {
+    //                 $("#content").load("/dataAnalysis/static/user-control.html")
+    //             },
+    //             error: function (data) {
+    //                 alert(data["status"])
+    //             }
+    //         }
+    //     )
+    // }
 
     function showDetailData(value) {
         // 找到操作的文件的名字
